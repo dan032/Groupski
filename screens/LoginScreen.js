@@ -53,7 +53,8 @@ function LoginScreen({navigation}) {
                 groups: []
             }],
         groups: [1]
-    }])
+    }]);
+
     return (
         <View style={styles.container}>
             <Text style={{marginTop: 20, fontSize: 20}}>Login Page</Text>
@@ -90,7 +91,6 @@ function LoginScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-        // flexDirection: "column"
     },
     txtInput : {
         height: 40,

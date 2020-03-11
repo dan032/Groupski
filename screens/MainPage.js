@@ -2,9 +2,10 @@ import * as React from 'react';
 import {
     View,
     Text,
-    TouchableOpacity,
     StyleSheet
 } from 'react-native';
+
+import Course from '../components/Course';
 
 function MainPage({route, navigation}) {
     const {data} = route.params;
@@ -15,14 +16,7 @@ function MainPage({route, navigation}) {
             <Text style={{marginTop: 10}}>Hello {data[0].userName}</Text>
 
             {data[0].courses.map(course => (
-                <TouchableOpacity
-                    style={styles.course}
-                    onPress={() => navigation.navigate('Course', {course, user: data[0]})}
-                >
-                    <Text>{course.code}</Text>
-                    <Text>{course.title}</Text>
-                </TouchableOpacity>
-
+                <Course course={course} user={data[0]} navigation={navigation}/>
             ))}
         </View>
     )
@@ -31,7 +25,6 @@ function MainPage({route, navigation}) {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-        // flexDirection: "column"
     },
     course: {
         padding: 30,
