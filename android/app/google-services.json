@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "452317841629",
+    "firebase_url": "https://groupski-e5b5a.firebaseio.com",
+    "project_id": "groupski-e5b5a",
+    "storage_bucket": "groupski-e5b5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452317841629:android:438df359b3ab4c9aeff334",
+        "android_client_info": {
+          "package_name": "com.reactproto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "452317841629-cp6j3rdo35emrdh56oj5lecond3kt3io.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_yh5micj7I-37LPx7YQ6nSYjV8vuzO0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "452317841629-cp6j3rdo35emrdh56oj5lecond3kt3io.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,7 +11,7 @@ function GroupScreen({route, navigation}) {
         <View style={styles.container}>
             {console.log(members)}
             {members.map((member) => (
-                <Text style={styles.member}>{member.userName}</Text>
+                <Text style={styles.member}>{members.length > 0 ? member.userName : 'No members in group'}</Text>
             ))}
         </View>
     )

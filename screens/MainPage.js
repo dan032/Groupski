@@ -8,15 +8,15 @@ import {
 import Course from '../components/Course';
 
 function MainPage({route, navigation}) {
-    const {data} = route.params;
+    const data = route.params.resolve._snapshot.value;
     return (
 
         <View style={styles.container}>
             <Text style={{fontSize: 20, marginTop: 20}}>Main Page</Text>
-            <Text style={{marginTop: 10}}>Hello {data[0].userName}</Text>
+            <Text style={{marginTop: 10}}>Hello {data.userName}</Text>
 
-            {data[0].courses.map(course => (
-                <Course course={course} user={data[0]} navigation={navigation}/>
+            {data.courses.map(course => (
+                <Course course={course} user={data} navigation={navigation}/>
             ))}
         </View>
     )
