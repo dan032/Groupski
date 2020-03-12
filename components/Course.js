@@ -6,14 +6,17 @@ import {
     StyleSheet
 } from 'react-native';
 
+
 function Course(props) {
+
     return(
         <TouchableOpacity
             style={styles.course}
-            onPress={() => props.navigation.navigate('Course', {course: props.course, user: props.user})}
+            onPress={() => props.navigation.navigate('Course', {course: props.course.courseData._snapshot.value.code, user: props.user})}
         >
-            <Text>{props.course.code}</Text>
-            <Text>{props.course.title}</Text>
+
+            <Text>{props.course.courseData._snapshot.value.code}</Text>
+            <Text>{props.course.courseData._snapshot.value.title}</Text>
         </TouchableOpacity>
     )
 }

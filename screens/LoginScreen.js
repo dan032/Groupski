@@ -18,20 +18,20 @@ function LoginScreen({navigation}) {
     const [userName, onChangeUserName] = React.useState('');
     const [password, onChangePassword] = React.useState('');
 
-
     function startRegister(){
-        register().then(resolve => navigation.navigate('MainPage', {resolve})).catch(() => {
+        register().then(resolve => navigation.navigate('MainPage', {data:resolve.data._snapshot.value, uid:resolve.uid})).catch(() => {
             console.log("ERROR BRO")
         });
     }
     async function register() {
         try {
             await auth().signInWithEmailAndPassword(userName, password);
-            const ref = database().ref(`/0/`);
+            const uid = auth().currentUser.uid;
+            const ref = database().ref(`/users/${uid}`);
             const data = await ref.once('value');
             return new Promise((resolve, reject) => {
                 if (data !== null){
-                    resolve(data)
+                    resolve({data, uid})
                 }
                 else{
                     reject(null)
@@ -43,51 +43,6 @@ function LoginScreen({navigation}) {
             console.error(e.message);
         }
     }
-
-    // const [data, changeData] = React.useState([{
-    //     'userName': 'Dan',
-    //     'password': 1234,
-    //     'courses': [
-    //         {
-    //             id: 1,
-    //             code: 'PROG1234',
-    //             title: 'Mobile Web Development',
-    //             groups: [
-    //                 {
-    //                     id: 1,
-    //                     members: [
-    //                         {
-    //                             userName: "Dan"
-    //                         },
-    //                         {
-    //                             userName: "Taha"
-    //                         },
-    //                         {
-    //                             userName: "Nathan"
-    //                         }]
-    //                 },
-    //                 {
-    //                     id: 2,
-    //                     members: [
-    //                         {
-    //                             userName: "James"
-    //                         },
-    //                         {
-    //                             userName: "Greg"
-    //                         },
-    //                         {
-    //                             userName: "Jordan"
-    //                         }]
-    //                 }]
-    //         },
-    //         {
-    //             id: 2,
-    //             code: 'PROG5678',
-    //             title: "Data Structures and Algorithms",
-    //             groups: []
-    //         }],
-    //     groups: [1]
-    // }]);
 
     return (
         <View style={styles.container}>
