@@ -20,7 +20,7 @@ function LoginScreen({navigation}) {
     const [password, onChangePassword] = React.useState('');
 
     function startRegister(){
-        register().then(resolve => navigation.navigate('MainPage', {data:resolve.data._snapshot.value, uid:resolve.uid})).catch(() => {
+        register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid})).catch(() => {
             console.log("ERROR BRO")
         });
     }
@@ -48,8 +48,15 @@ function LoginScreen({navigation}) {
                 case 'auth/invalid-email':
                     Alert.alert("Error", "Invalid Email");
                     break;
+                case 'auth/invalid-password':
+                    Alert.alert("Error", "Invalid Password, needs to be 6 characters or more");
+                    break;
+                case 'auth/wrong-password':
+                    Alert.alert("Error", "Wrong Password");
+                    break;
                 default:
-                    Alert.alert("Error", "Unknown Error");
+                    Alert.alert("Error", e.code.toString());
+                    break;
             }
         }
     }
