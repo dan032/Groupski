@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 
 function Group(props) {
-    console.log(props.group)
     return(
         <TouchableOpacity
             onPress={() => props.navigation.navigate('Group', {group: props.group})}

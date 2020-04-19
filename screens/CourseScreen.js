@@ -4,16 +4,16 @@ import {
     Text,
     TouchableOpacity,
     TextInput,
-    StyleSheet
+    StyleSheet, ScrollView,
 } from 'react-native';
 
 import Group from '../components/Group';
 import database from '@react-native-firebase/database';
 
 function CourseScreen({route, navigation}) {
-
     const [groups, onGroupChange] = React.useState([])
     const {course, user, group} = route.params;
+    const [isLoading, onLoadingChange] = React.useState(true);
 
     async function loadGroupData(groupId) {
 
@@ -32,17 +32,14 @@ function CourseScreen({route, navigation}) {
     }
 
     React.useState(() => {
-
-        Object.keys(course.groups).map((groupId) =>{
-            loadGroupData(groupId).then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {
-            });
-        })
-
+        if (course.groups){
+            Object.keys(course.groups).map((groupId) =>{
+                loadGroupData(groupId).then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {
+                });
+            })
+        }
+        onLoadingChange(false);
         }, []);
-
-
-    // const {user} = route.params;
-
 
     return (
         <View style={styles.container}>
@@ -50,6 +47,7 @@ function CourseScreen({route, navigation}) {
             {groups.map((group) => (
                 <Group navigation={navigation} group={group.groupData.val()}/>
         ))}
+        {groups.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no groups in the course yet"}</Text>}
         </View>
     )
 }

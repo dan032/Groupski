@@ -9,6 +9,7 @@ import database from '@react-native-firebase/database';
 function GroupScreen({route, navigation}) {
     const {group} = route.params;
     const [members, onMembersChange] = React.useState([])
+    const [isLoading, onLoadingChange] = React.useState(true);
 
     async function loadMemberData(memberId) {
         const ref = database().ref(`/users/${memberId}`);
@@ -25,11 +26,14 @@ function GroupScreen({route, navigation}) {
     }
 
     React.useState(() => {
-        Object.keys(group.members).map(member => {
-            loadMemberData(member).then(resolve => onMembersChange(members => [...members, resolve])).catch(() => {})
+        if (group.members){
+            Object.keys(group.members).map(member => {
+                loadMemberData(member).then(resolve => onMembersChange(members => [...members, resolve])).catch(() => {})
 
-        })
-    })
+            })
+        }
+        onLoadingChange(false);
+    });
 
 
     return (
@@ -39,7 +43,7 @@ function GroupScreen({route, navigation}) {
 
                 <Text style={styles.member}>{member.memberData.val().name}</Text>
             ))}
-
+            {members.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no members in the group yet"}</Text>}
         </View>
     )
 }

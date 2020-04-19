@@ -30,9 +30,7 @@ function AddClassScreen({route, navigation}) {
               const userRef = database().ref(`/users/${user}`);
               const courseData = await courseRef.once('value');
 
-
               if (courseData) {
-
                   if (courseData.val().secret == secret) {
                       let courseUpdates = {};
                       let userUpdates = {};
@@ -48,19 +46,17 @@ function AddClassScreen({route, navigation}) {
                   }
                    else {
                       Alert.alert("Error", "Incorrect Secret");
+                      onChangeLoading(false)
                   }
               }
-              // ref.update({})
-
-
-
-              // return new Promise((resolve, reject) => {
-              //
-              // })
-
+              else{
+                  Alert.alert("Error", "Incorrect Course Code")
+                  onChangeLoading(false)
+              }
           }
           catch (e) {
-              Alert.alert("Error", e.code)
+              Alert.alert("Error", "Incorrect Course Code or Secret")
+              onChangeLoading(false)
           }
 
       }
@@ -69,7 +65,7 @@ function AddClassScreen({route, navigation}) {
     return(
         <View style={styles.container}>
 
-            <Text style={{marginTop: 20, fontSize: 20}}>Sign up Page</Text>
+            <Text style={{marginTop: 20, fontSize: 20}}>Sign up for a Course</Text>
             <TextInput
                 style={styles.txtInput}
                 onChangeText={text=> onChangeCode(text)}
@@ -80,7 +76,7 @@ function AddClassScreen({route, navigation}) {
                 style={styles.txtInput}
                 onChangeText={text=> onChangeSecret(text)}
                 value={secret}
-                placeholder={"Enter the Course Secret given to you by your teacher"}
+                placeholder={"Enter the Course Secret"}
             />
             <View style={styles.btnRow}>
                 <TouchableOpacity

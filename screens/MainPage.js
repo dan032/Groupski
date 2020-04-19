@@ -3,7 +3,7 @@ import {
     ScrollView,
     View,
     Text,
-    StyleSheet, TouchableOpacity,
+    StyleSheet, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 
 import Course from '../components/Course';
@@ -14,6 +14,7 @@ function MainPage({route, navigation}) {
     const data = route.params.data;
     const uid = route.params.uid;
     const [courses, onCourseChange] = React.useState([]);
+    const [isLoading, onLoadingChange] = React.useState(true);
 
     async function loadCourseData(courseId) {
         const ref = database().ref(`/courses/${courseId}`);
@@ -25,7 +26,6 @@ function MainPage({route, navigation}) {
             else{
                 reject(null)
             }
-
         });
     }
 
@@ -35,12 +35,12 @@ function MainPage({route, navigation}) {
             loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
                 console.log("Error courses")
             });
-        })
+        });
         route.params.update = false;
-    }
+        onLoadingChange(false);
+    };
 
     React.useState(() => {
-        console.log("IN US: " + JSON.stringify(data));
         if (data.courses){
             Object.keys(data.courses).map((courseId) => {
                 loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
@@ -48,6 +48,7 @@ function MainPage({route, navigation}) {
                 });
             })
         }
+        onLoadingChange(false);
     },[]);
 
     return (
@@ -60,13 +61,14 @@ function MainPage({route, navigation}) {
                 style={styles.course}
                 onPress={() => navigation.navigate('AddClass', {user: uid, data: data})}
             >
-                <Text>{"Add a Course"}</Text>
+                <Text>Add a Course</Text>
             </TouchableOpacity>
             {courses.map(course => (
 
                 <Course course={course} user={uid} navigation={navigation}/>
             ))}
-            {courses.length === 0 && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"You are not signed up for any courses"}</Text>}
+            {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
+            {courses.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>You are not signed up for any courses</Text>}
             {route.params.update && updateData()}
         </ScrollView>
     )
