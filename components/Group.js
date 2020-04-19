@@ -6,12 +6,13 @@ import {
 } from 'react-native';
 
 function Group(props) {
+    console.log(props.group)
     return(
         <TouchableOpacity
-            onPress={() => props.navigation.navigate('Group', props.group)}
+            onPress={() => props.navigation.navigate('Group', {group: props.group})}
             style={styles.group}
         >
-            <Text>Group #{props.group.id}</Text>
+            <Text>Group Name: {props.group.title}</Text>
         </TouchableOpacity>
     )
 }

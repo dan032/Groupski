@@ -13,14 +13,15 @@ import database from '@react-native-firebase/database';
 function CourseScreen({route, navigation}) {
 
     const [groups, onGroupChange] = React.useState([])
-    const {course} = route.params;
-    console.log(course)
+    const {course, user, group} = route.params;
 
     async function loadGroupData(groupId) {
+
         const ref = database().ref(`/groups/${groupId}`);
         const groupData = await ref.once('value');
         return new Promise((resolve, reject) => {
-            if (data !== null){
+            if (course !== null){
+
                 resolve({groupData})
             }
             else{
@@ -31,8 +32,12 @@ function CourseScreen({route, navigation}) {
     }
 
     React.useState(() => {
-            loadGroupData().then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {
+
+        Object.keys(course.groups).map((groupId) =>{
+            loadGroupData(groupId).then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {
             });
+        })
+
         }, []);
 
 
@@ -43,7 +48,7 @@ function CourseScreen({route, navigation}) {
         <View style={styles.container}>
             <Text>{course.code}</Text>
             {groups.map((group) => (
-                <Group navigation={navigation} group={group}/>
+                <Group navigation={navigation} group={group.groupData._snapshot.value}/>
         ))}
         </View>
     )

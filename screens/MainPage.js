@@ -40,14 +40,12 @@ function MainPage({route, navigation}) {
     return (
 
         <View style={styles.container}>
-            {console.log("DATA: " + data)}
-            {console.log("COURSES: " + JSON.stringify(courses))}
             <Text style={{fontSize: 20, marginTop: 20}}>Main Page</Text>
-            <Text style={{marginTop: 10}}>Hello {data.userName}</Text>
+            <Text style={{marginTop: 10}}>Hello {data.name}</Text>
 
             {courses.map(course => (
 
-                <Course course={course} user={uid} navigation={navigation}>{console.log("COURSE: " + JSON.stringify(course))}</Course>
+                <Course course={course} user={uid} navigation={navigation}/>
             ))}
 
         </View>

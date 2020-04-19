@@ -4,15 +4,42 @@ import {
     Text,
     StyleSheet
 } from 'react-native';
+import database from '@react-native-firebase/database';
 
 function GroupScreen({route, navigation}) {
-    const {members} = route.params;
+    const {group} = route.params;
+    const [members, onMembersChange] = React.useState([])
+
+    async function loadMemberData(memberId) {
+        const ref = database().ref(`/users/${memberId}`);
+        const memberData = await ref.once('value');
+        return new Promise((resolve, reject) => {
+            if (group !== null){
+                resolve({memberData})
+            }
+            else{
+                reject(null)
+            }
+
+        });
+    }
+
+    React.useState(() => {
+        Object.keys(group.members).map(member => {
+            loadMemberData(member).then(resolve => onMembersChange(members => [...members, resolve])).catch(() => {})
+
+        })
+    })
+
+
     return (
         <View style={styles.container}>
-            {console.log(members)}
-            {members.map((member) => (
-                <Text style={styles.member}>{members.length > 0 ? member.userName : 'No members in group'}</Text>
+
+            {members.map(member => (
+
+                <Text style={styles.member}>{member.memberData._snapshot.value.name}</Text>
             ))}
+
         </View>
     )
 }
