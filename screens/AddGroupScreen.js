@@ -25,7 +25,7 @@ function AddGroupScreen({route, navigation}) {
             const ref = database().ref();
             const groupData = await ref.child('groups').once('value');
             const key = ref.child('groups').push().key;
-            console.log(course);
+
             if (groupName in groupData.val()){
                 Alert.alert("Error", "Group already exists!");
             }
@@ -36,7 +36,7 @@ function AddGroupScreen({route, navigation}) {
                     beingGraded: false,
                     course: courseCode,
                     title: groupName
-                }
+                };
                 updates[`/groups/${key}/members/${user}`] = true;
                 updates[`/users/${user}/groups/${key}`] = true;
                 updates[`/courses/${course.code}/groups/${key}`] = true;

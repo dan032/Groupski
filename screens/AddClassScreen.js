@@ -26,22 +26,16 @@ function AddClassScreen({route, navigation}) {
       else{
           try{
               onChangeLoading(true);
-              const ref = database
-
-              const courseRef = database().ref(`/courses/${code}`);
-              const userRef = database().ref(`/users/${user}`);
-              const courseData = await courseRef.once('value');
+              const ref = database().ref();
+              const courseData = await ref.child('courses').child(code).once('value');
 
               if (courseData) {
                   if (courseData.val().secret == secret) {
-                      let courseUpdates = {};
-                      let userUpdates = {};
-                      courseUpdates[`/students/${user}`] = true;
-                      userUpdates[`/courses/${code}`] = true;
+                      let updates = {};
+                      updates[`/courses/${code}/students/${user}`] = true;
+                      updates[`/users/${user}/courses/${code}`] = true;
 
-                      courseRef.update(courseUpdates);
-                      userRef.update(userUpdates);
-                      // const newData = await database().ref(`/users/${user}`);
+                      ref.update(updates);
                       data.courses[`${code}`] = true;
                       onChangeLoading(false);
                       navigation.navigate("MainPage", {uid: user, data: data, update: true})
