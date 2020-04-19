@@ -14,7 +14,7 @@ function Group(props) {
         else{
             props.navigation.navigate('Group', {group: props.group})
         }
-    }
+    };
 
     return(
         <TouchableOpacity

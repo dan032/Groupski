@@ -51,7 +51,7 @@ function CourseScreen({route, navigation}) {
             })
         }
         onLoadingChange(false);
-        }, []);
+        });
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

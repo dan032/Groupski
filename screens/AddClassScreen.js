@@ -14,6 +14,7 @@ import auth from '@react-native-firebase/auth';
 
 function AddClassScreen({route, navigation}) {
     const [code, onChangeCode] = React.useState("");
+    const [subCode, onChangeSubCode] = React.useState("");
     const [secret, onChangeSecret] = React.useState("");
     const [isLoading, onChangeLoading] = React.useState(false);
     const {user} = route.params;
@@ -27,22 +28,36 @@ function AddClassScreen({route, navigation}) {
           try{
               onChangeLoading(true);
               const ref = database().ref();
-              const courseData = await ref.child('courses').child(code).once('value');
-
+              // const courseData = await ref.child('courses').child(code).once('value');
+              const courseData = await ref.child('courses').once('value');
               if (courseData) {
-                  if (courseData.val().secret == secret) {
+
+                  const coursesKeys =  Object.keys(courseData.val());
+                  const length = coursesKeys.length;
+                  let currCourse = {};
+
+                  for (let i = 0; i < length; i++){
+                      const curr = courseData.val()[coursesKeys[i]];
+                      if (curr.code === code && curr.subcode === subCode){
+                          currCourse = curr;
+                          break;
+                      }
+                  }
+                  console.log(currCourse);
+                  if (currCourse){
+                      const key = currCourse.id;
+                      console.log(key);
                       let updates = {};
-                      updates[`/courses/${code}/students/${user}`] = true;
-                      updates[`/users/${user}/courses/${code}`] = true;
+                      updates[`/courses/${key}/students/${user}`] = true;
+                      updates[`/users/${user}/courses/${key}`] = true;
 
                       ref.update(updates);
-                      data.courses[`${code}`] = true;
+                      data.courses[`${key}`] = true;
                       onChangeLoading(false);
                       navigation.navigate("MainPage", {uid: user, data: data, update: true})
                   }
-                   else {
-                      Alert.alert("Error", "Incorrect Secret");
-                      onChangeLoading(false)
+                  else{
+                      Alert.alert("Course does not exist");
                   }
               }
               else{
@@ -67,6 +82,12 @@ function AddClassScreen({route, navigation}) {
                 onChangeText={text=> onChangeCode(text)}
                 value={code}
                 placeholder={"Enter the Course Code that you want to join"}
+            />
+            <TextInput
+                style={styles.txtInput}
+                onChangeText={text=> onChangeSubCode(text)}
+                value={subCode}
+                placeholder={"Enter the Sub Code for the course"}
             />
             <TextInput
                 style={styles.txtInput}

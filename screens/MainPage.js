@@ -56,13 +56,21 @@ function MainPage({route, navigation}) {
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={{fontSize: 20, marginTop: 20}}>Main Page</Text>
             <Text style={{marginTop: 10}}>Hello {data.name}</Text>
+            {console.log(data.isProf)}
+            {data.isProf && <TouchableOpacity
+                style={styles.course}
+                onPress={() => navigation.navigate('CreateClass', {user: uid, data: data})}
+            >
+                <Text>Create a Course</Text>
+            </TouchableOpacity>}
 
-            <TouchableOpacity
+            {!data.isProf && <TouchableOpacity
                 style={styles.course}
                 onPress={() => navigation.navigate('AddClass', {user: uid, data: data})}
             >
                 <Text>Add a Course</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
+
             {courses.map(course => (
 
                 <Course course={course} user={uid} navigation={navigation}/>
