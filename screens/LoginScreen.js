@@ -4,7 +4,8 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -40,7 +41,16 @@ function LoginScreen({navigation}) {
             });
 
         } catch (e) {
-            console.error(e.message);
+            switch (e.code) {
+                case 'auth/user-not-found':
+                    Alert.alert("Error", "User not Found");
+                    break;
+                case 'auth/invalid-email':
+                    Alert.alert("Error", "Invalid Email");
+                    break;
+                default:
+                    Alert.alert("Error", "Unknown Error");
+            }
         }
     }
 
