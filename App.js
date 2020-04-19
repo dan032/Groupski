@@ -15,7 +15,7 @@ const App: () => React$Node = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="SignUp" component={SignUpScreen}/>
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="Course" component={CourseScreen} />

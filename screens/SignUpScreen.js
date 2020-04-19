@@ -3,7 +3,7 @@ import {
     View,
     Text,
     TouchableOpacity,
-    StyleSheet, TextInput, Alert,
+    StyleSheet, TextInput, Alert, ActivityIndicator,
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -14,6 +14,7 @@ function SignUpScreen({route, navigation}) {
     const [userName, onChangeUserName] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [email, onChangeEmail] = React.useState('');
+    const [isLoading, onChangeLoading] = React.useState(false);
 
     const  registerUser = async () =>{
         if (userName === '' || password === '' || email === ''){
@@ -23,6 +24,7 @@ function SignUpScreen({route, navigation}) {
             Alert.alert("Error", "Password needs to be 6 characters or greater");
         }
         else{
+            onChangeLoading(true);
             auth()
             .createUserWithEmailAndPassword(email, password)
             .then(async (res) => {
@@ -30,7 +32,10 @@ function SignUpScreen({route, navigation}) {
                 const uid = auth().currentUser.uid;
                 const ref = database().ref(`/users/${uid}`);
 
-                ref.updateChildrenAsync({name:userName})
+                ref.update({name:userName}).then(() => {
+                    onChangeLoading(false);
+                    navigation.navigate("Login", {message: "Registration complete, please login"})
+                });
             })
             .catch((err) => {
                 switch (err.code) {
@@ -76,7 +81,7 @@ function SignUpScreen({route, navigation}) {
                     <Text style={[styles.btn, styles.btnSignUp]}>Cancel</Text>
                 </TouchableOpacity>
             </View>
-
+            {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
         </View>
     )
 }

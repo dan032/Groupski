@@ -5,7 +5,8 @@ import {
     TextInput,
     StyleSheet,
     TouchableOpacity,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -15,9 +16,11 @@ import auth from '@react-native-firebase/auth';
 /**
  * @return {null}
  */
-function LoginScreen({navigation}) {
+function LoginScreen({route, navigation}) {
     const [userName, onChangeUserName] = React.useState('');
     const [password, onChangePassword] = React.useState('');
+    const [isLoading, onChangeLoading] = React.useState(false);
+
 
     function startRegister(){
         register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid})).catch(() => {
@@ -26,10 +29,11 @@ function LoginScreen({navigation}) {
     }
     async function register() {
         try {
+            onChangeLoading(true);
             await auth().signInWithEmailAndPassword(userName, password);
             const uid = auth().currentUser.uid;
             const ref = database().ref(`/users/${uid}`);
-            const data = await ref.once('value');
+            const data = await ref.once('value').then(onChangeLoading(false));
             return new Promise((resolve, reject) => {
                 if (data !== null){
                     resolve({data, uid})
@@ -63,6 +67,7 @@ function LoginScreen({navigation}) {
 
     return (
         <View style={styles.container}>
+            {route.params && route.params.message && <Text style={{color:"green", marginTop: 20}}>{route.params.message}</Text>}
             <Text style={{marginTop: 20, fontSize: 20}}>Login Page</Text>
             <TextInput
                 style={styles.txtInput}
@@ -90,6 +95,7 @@ function LoginScreen({navigation}) {
                     <Text style={[styles.btn, styles.btnSignUp]}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
+            {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
 
         </View>
     )
