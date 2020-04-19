@@ -6,10 +6,20 @@ import {
 } from 'react-native';
 
 function Group(props) {
+
+    const groupClick = () => {
+        if (props.group.beingGraded){
+            props.navigation.navigate('Rubric', {group: props.group})
+        }
+        else{
+            props.navigation.navigate('Group', {group: props.group})
+        }
+    }
+
     return(
         <TouchableOpacity
-            onPress={() => props.navigation.navigate('Group', {group: props.group})}
-            style={styles.group}
+            onPress={() => groupClick()}
+            style={[styles.group, props.group.beingGraded && styles.active]}
         >
             <Text>Group Name: {props.group.title}</Text>
         </TouchableOpacity>
@@ -28,6 +38,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "lightblue"
+    },
+    active: {
+        backgroundColor: 'lightgreen'
     }
 })
 

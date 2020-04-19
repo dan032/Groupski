@@ -41,7 +41,7 @@ function CourseScreen({route, navigation}) {
         }
         route.params.update = false;
         onLoadingChange(false);
-    }
+    };
 
     React.useState(() => {
         if (course.groups){
