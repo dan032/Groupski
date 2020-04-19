@@ -46,7 +46,6 @@ function AddClassScreen({route, navigation}) {
                   console.log(currCourse);
                   if (currCourse){
                       const key = currCourse.id;
-                      console.log(key);
                       let updates = {};
                       updates[`/courses/${key}/students/${user}`] = true;
                       updates[`/users/${user}/courses/${key}`] = true;

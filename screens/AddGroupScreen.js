@@ -43,6 +43,10 @@ function AddGroupScreen({route, navigation}) {
 
                 ref.child('groups').child(key).update(group);
                 ref.update(updates);
+
+                if (course.groups === undefined){
+                    course.groups = {}
+                }
                 course.groups[key] = group;
                 onChangeLoading(false);
                 navigation.navigate("Course", {user: user, course: course, update: true})

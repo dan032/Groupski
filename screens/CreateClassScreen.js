@@ -41,6 +41,7 @@ function CreateClassScreen({route, navigation}) {
                 }
                 if (exists){
                     Alert.alert("Error", "Course Already exists!")
+                    onChangeLoading(false);
                 }
                 else{
                     const key = ref.child('courses').push().key;
@@ -56,12 +57,15 @@ function CreateClassScreen({route, navigation}) {
                     ref.update(updates)
                     ref.child('courses').child(key).update(newCourse);
                     data.courses[`${key}`] = true;
+
+
                     onChangeLoading(false);
                     navigation.navigate("MainPage", {uid: user, data: data, update: true})
                 }
             }
             catch (e) {
                 Alert.alert("Error", e.message);
+                onChangeLoading(false);
             }
         }
     }
