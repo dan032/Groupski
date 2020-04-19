@@ -48,7 +48,7 @@ function CourseScreen({route, navigation}) {
         <View style={styles.container}>
             <Text>{course.code}</Text>
             {groups.map((group) => (
-                <Group navigation={navigation} group={group.groupData._snapshot.value}/>
+                <Group navigation={navigation} group={group.groupData.val()}/>
         ))}
         </View>
     )

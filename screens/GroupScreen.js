@@ -37,7 +37,7 @@ function GroupScreen({route, navigation}) {
 
             {members.map(member => (
 
-                <Text style={styles.member}>{member.memberData._snapshot.value.name}</Text>
+                <Text style={styles.member}>{member.memberData.val().name}</Text>
             ))}
 
         </View>
