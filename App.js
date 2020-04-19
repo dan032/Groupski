@@ -9,6 +9,7 @@ import MainPage from './screens/MainPage';
 import CourseScreen from './screens/CourseScreen';
 import GroupScreen from './screens/GroupScreen';
 import AddClassScreen from './screens/AddClassScreen';
+import AddGroupScreen from './screens/AddGroupScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const App: () => React$Node = () => {
         <Stack.Screen name="Course" component={CourseScreen} />
         <Stack.Screen name="Group" component={GroupScreen}/>
         <Stack.Screen name="AddClass" component={AddClassScreen}/>
+        <Stack.Screen name="AddGroup" component={AddGroupScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

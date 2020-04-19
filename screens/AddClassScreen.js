@@ -26,6 +26,8 @@ function AddClassScreen({route, navigation}) {
       else{
           try{
               onChangeLoading(true);
+              const ref = database
+
               const courseRef = database().ref(`/courses/${code}`);
               const userRef = database().ref(`/users/${user}`);
               const courseData = await courseRef.once('value');
