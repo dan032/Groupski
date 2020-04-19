@@ -3,12 +3,38 @@ import {
     View,
     Text,
     TouchableOpacity,
-    StyleSheet, TextInput,
+    StyleSheet, TextInput, default as Alert,
 } from 'react-native';
+
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+
 
 function SignUpScreen({route, navigation}) {
     const [userName, onChangeUserName] = React.useState('');
     const [password, onChangePassword] = React.useState('');
+    const [email, onChangeEmail] = React.useState('');
+
+    const  registerUser = async () =>{
+        if (userName === '' || password === '' || email === ''){
+            Alert.alert("Please enter appropriate details");
+        }
+        else{
+                auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then(async (res) => {
+                    await auth().signInWithEmailAndPassword(email, password);
+                    const uid = auth().currentUser.uid;
+                    const ref = database().ref(`/users/${uid}`);
+
+                    ref.updateChildrenAsync({name:userName})
+                })
+                    .catch((err) => {
+                        Alert.alert("Error");
+                    })
+
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -17,7 +43,13 @@ function SignUpScreen({route, navigation}) {
                 style={styles.txtInput}
                 onChangeText={text=> onChangeUserName(text)}
                 value={userName}
-                placeholder={"Enter Username"}
+                placeholder={"Enter your full name"}
+            />
+            <TextInput
+                style={styles.txtInput}
+                onChangeText={text=> onChangeEmail(text)}
+                value={email}
+                placeholder={"Enter Email"}
             />
             <TextInput
                 style={styles.txtInput}
@@ -27,7 +59,7 @@ function SignUpScreen({route, navigation}) {
             />
             <View style={styles.btnRow}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Login')}>
+                    onPress={() => registerUser()}>
                     <Text style={[styles.btn, styles.btnSubmit]}>Submit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
