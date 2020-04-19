@@ -3,7 +3,7 @@ import {
     View,
     Text,
     TouchableOpacity,
-    StyleSheet, TextInput, default as Alert,
+    StyleSheet, TextInput, Alert,
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -17,22 +17,31 @@ function SignUpScreen({route, navigation}) {
 
     const  registerUser = async () =>{
         if (userName === '' || password === '' || email === ''){
-            Alert.alert("Please enter appropriate details");
+            Alert.alert("Error", "Please enter appropriate details");
+        }
+        else if (password.length < 6){
+            Alert.alert("Error", "Password needs to be 6 characters or greater");
         }
         else{
-                auth()
-                .createUserWithEmailAndPassword(email, password)
-                .then(async (res) => {
-                    await auth().signInWithEmailAndPassword(email, password);
-                    const uid = auth().currentUser.uid;
-                    const ref = database().ref(`/users/${uid}`);
+            auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(async (res) => {
+                await auth().signInWithEmailAndPassword(email, password);
+                const uid = auth().currentUser.uid;
+                const ref = database().ref(`/users/${uid}`);
 
-                    ref.updateChildrenAsync({name:userName})
-                })
-                    .catch((err) => {
-                        Alert.alert("Error");
-                    })
-
+                ref.updateChildrenAsync({name:userName})
+            })
+            .catch((err) => {
+                switch (err.code) {
+                    case 'auth/email-already-in-use':
+                        Alert.alert("Error", "Email is already in use");
+                        break;
+                    case 'auth/invalid-email':
+                        Alert.alert("Error", "Invalid Email");
+                        break;
+                }
+            })
         }
     }
 
