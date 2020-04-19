@@ -29,11 +29,14 @@ function MainPage({route, navigation}) {
     }
 
     React.useState(() => {
-        Object.keys(data.courses).map((courseId) => {
-            loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
-                console.log("Error courses")
-            });
-        })
+        if (data.courses){
+            Object.keys(data.courses).map((courseId) => {
+                loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
+                    console.log("Error courses")
+                });
+            })
+        }
+
 
     },[]);
 
@@ -47,6 +50,7 @@ function MainPage({route, navigation}) {
 
                 <Course course={course} user={uid} navigation={navigation}/>
             ))}
+            {courses.length === 0 && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"You are not signed up for any courses"}</Text>}
 
         </View>
     )

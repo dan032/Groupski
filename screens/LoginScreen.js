@@ -45,6 +45,7 @@ function LoginScreen({route, navigation}) {
             });
 
         } catch (e) {
+            onChangeLoading(false);
             switch (e.code) {
                 case 'auth/user-not-found':
                     Alert.alert("Error", "User not Found");
