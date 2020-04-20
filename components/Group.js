@@ -14,15 +14,22 @@ function Group(props) {
     //course deletion here
     const deleteGroup = async () => {
         const ref = database().ref();
-        const courseData = await ref.child(`/courses/`).once('value');
         const userData = await ref.child(`/users`).once('value');
-        const groupId = props.group.idl
-        const courseKeys = Object.keys(courseData.val());
+        const groupId = props.group.id
         const userKeys = Object.keys(userData.val());
-        //
-        // for (let i = 0; i < courseKeys.length; i++){
-        //     if (courseData.val()[courseKeys[i]].groups && groupId in courseData.val()[courseKeys[i]])
-        // }
+
+        ref.child(`/courses/${props.course.id}/groups/${groupId}`).remove();
+
+        for (let i = 0; i < userKeys.length; i++){
+            if (userData.val()[userKeys[i]].groups && groupId in userData.val()[userKeys[i]].groups){
+                ref.child(`/users/${userKeys[i]}/groups/${groupId}`).remove();
+            }
+        }
+
+        ref.child(`/groups/${groupId}`).remove()
+
+        const updateCourseData = await ref.child(`/courses/${props.course.id}`).once('value');
+        props.navigation.navigate("Course", {user: props.user, course:updateCourseData.val(), isProf: props.isProf, update: true})
 
 
     }
@@ -60,14 +67,12 @@ function Group(props) {
             }
         }
 
-
         props.navigation.navigate("Course", {user:props.user, group:props.group, isProf:props.isProf, course:props.course, update: true, data: props.data})
     }
 
     const deleteAlert = () => {
         //only fire if admin/professor
         if(props.isProf){
-            console.log("is prof")
             Alert.alert(
                 'Menu',
                 'Select an option',

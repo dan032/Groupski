@@ -43,7 +43,6 @@ function Course(props) {
     const deleteAlert = () => {
         //only fire if admin/professor
         if(props.isProf){
-            console.log("is prof")
             Alert.alert(
                 'Notice!',
                 'Do you want to delete this course?',
@@ -55,9 +54,6 @@ function Course(props) {
                 {cancelable: true},
             );
         }
-        else{
-            console.log("not prof, go away")
-        }
     }
 
     return(
@@ -67,7 +63,6 @@ function Course(props) {
                 {course: props.course.courseData.val(), user: props.user, isProf: props.isProf, update: true, data: props.data})}
             onLongPress={() => {deleteAlert()}}
         >
-            {console.log("Course: "+ JSON.stringify(props.course))}
             <Text>{props.course.courseData.val().code}</Text>
             <Text>{props.course.courseData.val().title}</Text>
         </TouchableOpacity>

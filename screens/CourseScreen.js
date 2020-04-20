@@ -78,7 +78,6 @@ function CourseScreen({route, navigation}) {
                 style={styles.group}
                 onPress={() => navigation.navigate('AddGroup', {user: user, course: course})}
             >
-                {console.log("COURSE: " + JSON.stringify(course))}
                 <Text>Add a Group</Text>
             </TouchableOpacity>
             {groups.map((group) => (
