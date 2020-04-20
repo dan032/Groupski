@@ -44,6 +44,7 @@ function CourseScreen({route, navigation}) {
     };
 
     React.useState(() => {
+        console.log("CS: " + JSON.stringify(course))
         if (course.groups){
             Object.keys(course.groups).map((groupId) =>{
                 loadGroupData(groupId).then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {

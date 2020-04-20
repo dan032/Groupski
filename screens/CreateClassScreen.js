@@ -47,17 +47,24 @@ function CreateClassScreen({route, navigation}) {
                     const key = ref.child('courses').push().key;
                     let newCourse = {
                         code,
+                        id: key,
                         subcode: subCode,
-                        prof: {user:true},
+                        prof: user,
                         title: courseName,
                         secret
-                    }
+                    };
                     let updates = {}
                     updates[`/users/${user}/courses/${key}`] = true;
                     ref.update(updates)
                     ref.child('courses').child(key).update(newCourse);
-                    data.courses[`${key}`] = true;
+                    console.log(JSON.stringify(data))
 
+                    if (data.courses === undefined){
+                        data.courses = {[key] : true}
+                    }
+                    else{
+                        data.courses = {...data.courses, [key]: true}
+                    }
 
                     onChangeLoading(false);
                     navigation.navigate("MainPage", {uid: user, data: data, update: true})

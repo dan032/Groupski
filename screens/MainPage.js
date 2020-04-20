@@ -19,6 +19,7 @@ function MainPage({route, navigation}) {
     async function loadCourseData(courseId) {
         const ref = database().ref(`/courses/${courseId}`);
         const courseData = await ref.once('value');
+        console.log("LCD: " + JSON.stringify(courseData))
         return new Promise((resolve, reject) => {
             if (data !== null){
                 resolve({courseData})
@@ -32,12 +33,14 @@ function MainPage({route, navigation}) {
     const updateData = () => {
         onCourseChange([]);
         Object.keys(data.courses).map((courseId) => {
+            console.log(courseId)
             loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
                 console.log("Error courses")
             });
         });
         route.params.update = false;
         onLoadingChange(false);
+        {console.log("HERE: " + JSON.stringify(courses))}
     };
 
     React.useState(() => {
@@ -54,6 +57,7 @@ function MainPage({route, navigation}) {
     return (
 
         <ScrollView contentContainerStyle={styles.container}>
+
             <Text style={{fontSize: 20, marginTop: 20}}>Main Page</Text>
             <Text style={{marginTop: 10}}>Hello {data.name}</Text>
             {console.log(data.isProf)}

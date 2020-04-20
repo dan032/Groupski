@@ -31,7 +31,8 @@ function AddGroupScreen({route, navigation}) {
             }
             else{
                 let updates = {};
-                const courseCode = course.code;
+                console.log(course)
+                const courseCode = course.id;
                 let group = {
                     beingGraded: false,
                     course: courseCode,
@@ -44,10 +45,10 @@ function AddGroupScreen({route, navigation}) {
                 ref.child('groups').child(key).update(group);
                 ref.update(updates);
 
-                if (course.groups === undefined){
-                    course.groups = {}
-                }
-                course.groups[key] = group;
+                course["groups"] = {
+                    [key]: group
+                };
+
                 onChangeLoading(false);
                 navigation.navigate("Course", {user: user, course: course, update: true})
             }
