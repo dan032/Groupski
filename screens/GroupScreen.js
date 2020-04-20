@@ -12,12 +12,14 @@ function GroupScreen({route, navigation}) {
     const [members, onMembersChange] = React.useState([])
     const [isLoading, onLoadingChange] = React.useState(true);
 
+    //UI does not update to reflect removed members
+    //Need to check if user removing is leader or removing themselves to allow removal
     async function removeFromGroup(memberId){
         const ref = database().ref(`/groups/${group.id}/members/${memberId}`);
         console.log(`removing: ${(await ref.once('value')).val()}`)
         //ref.remove();
     }
-
+    
     async function loadMemberData(memberId) {
         const ref = database().ref(`/users/${memberId}`);
         const memberData = await ref.once('value');
