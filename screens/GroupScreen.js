@@ -20,8 +20,8 @@ function GroupScreen({route, navigation}) {
             const groupInUser = database().ref(`/users/${member.id}/groups/${group.id}`);
             console.log(`removing user in groups: ${(await userInGroups.once('value')).val()}`);
             console.log(`removing group in user: ${(await groupInUser.once('value')).val()}`);
-            // userInGroups.remove();
-            // groupInUser.remove();
+            userInGroups.remove();
+            groupInUser.remove();
         }else{
             Alert.alert("Error","You must be a professor to remove members other than yourself.")
         }
