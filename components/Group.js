@@ -11,6 +11,31 @@ import Geolocation from "react-native-geolocation-service";
 
 function Group(props) {
 
+    //course deletion here
+    const deleteGroup = () => {
+        console.log('deleting press confirmed')
+    }
+
+    const deleteAlert = () => {
+        //only fire if admin/professor
+        if(props.isProf){
+            console.log("is prof")
+            Alert.alert(
+                'Notice!',
+                'Do you want to delete this group?',
+                [
+                    //delete logic
+                    {text: 'Yes', onPress: () => deleteGroup()},
+                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                ],
+                {cancelable: true},
+            );
+        }
+        else{
+            console.log("not prof, go away")
+        }
+    }
+
     // Below distance functions were taken from
     // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
 
@@ -95,6 +120,7 @@ function Group(props) {
         <TouchableOpacity
             onPress={() => groupClick()}
             style={[styles.group, props.group.beingGraded && styles.active]}
+            onLongPress={() => deleteAlert()}
         >
 
             <Text>Group Name: {props.group.title}</Text>
