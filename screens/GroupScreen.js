@@ -11,6 +11,11 @@ function GroupScreen({route, navigation}) {
     const [members, onMembersChange] = React.useState([])
     const [isLoading, onLoadingChange] = React.useState(true);
 
+    async function removeFromGroup(memberId){
+        const ref = database().ref(`/groups/${group.id}/members/${memberId}`);
+        ref.remove();
+    }
+
     async function loadMemberData(memberId) {
         const ref = database().ref(`/users/${memberId}`);
         const memberData = await ref.once('value');
@@ -49,8 +54,9 @@ function GroupScreen({route, navigation}) {
         <View style={styles.container}>
 
             {members.map(member => (
-
-                <Text style={styles.member}>{member.memberData.val().name}</Text>
+                <TouchableOpacity onLongPress={()=>removeFromGroup(member.memberData.val().id)}>
+                    <Text style={styles.member}>{member.memberData.val().name}</Text>
+                </TouchableOpacity>
             ))}
             {members.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no members in the group yet"}</Text>}
             {console.log("PROF: " + isProf)}
