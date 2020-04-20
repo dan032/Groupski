@@ -119,7 +119,7 @@ function Group(props) {
                                 const distance = getDistanceFromLatLonInKm(userUpdate.latitude, userUpdate.longitude, profData.val().latitude, profData.val().longitude)
                                 console.log(distance)
                                 if (distance  >= 0){
-                                    props.navigation.navigate('Rubric', {group: props.group, user: props.user, isProf: props.isProf, course: props.course})
+                                    props.navigation.navigate('Rubric', {group: props.group, user: props.user, isProf: props.isProf, course: props.course, update: true})
                                 }
                             },
                             error => {

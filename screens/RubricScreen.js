@@ -33,7 +33,7 @@ function RubricScreen({route, navigation}) {
         const currUser = user;
         let grade = parseFloat(((c1 + c2 + c3)/3).toFixed(2));
         if (isProf){
-            ref.child(`/grades/${groupBeingMarked}/profGrade`).set(grade);
+            ref.child(`/courses/${currCourseId}/grades/${groupBeingMarked}/profGrade`).set(grade);
         }
         else{
             const groupKeys = Object.keys(groupData.val());
@@ -45,7 +45,7 @@ function RubricScreen({route, navigation}) {
                 }
             }
 
-            ref.child(`/grades/${groupBeingMarked}/${markingGroup.id}`).set(grade)
+            ref.child(`/courses/${currCourseId}/grades/${groupBeingMarked}/${markingGroup.id}`).set(grade)
         }
 
         navigation.navigate("MainPage", {isProf: isProf, course: course, user: user, group: group})
