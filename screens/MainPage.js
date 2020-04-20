@@ -29,7 +29,7 @@ function MainPage({route, navigation}) {
         });
     }
 
-    const updateData = () => {
+    const updateData =  () => {
         onCourseChange([]);
         Object.keys(data.courses).map((courseId) => {
 
@@ -39,18 +39,19 @@ function MainPage({route, navigation}) {
         });
         route.params.update = false;
         onLoadingChange(false);
-    };
 
-    React.useState(() => {
-        if (data.courses){
-            Object.keys(data.courses).map((courseId) => {
-                loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
-                    console.log("Error courses")
-                });
-            })
-        }
-        onLoadingChange(false);
-    },[]);
+    };
+    //
+    // React.useState(() => {
+    //     if (data.courses){
+    //         Object.keys(data.courses).map((courseId) => {
+    //             loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
+    //                 console.log("Error courses")
+    //             });
+    //         })
+    //     }
+    //     onLoadingChange(false);
+    // });
 
     return (
 
@@ -69,12 +70,13 @@ function MainPage({route, navigation}) {
                 style={styles.course}
                 onPress={() => navigation.navigate('AddClass', {user: uid, data: data})}
             >
+                {console.log("MP: " + JSON.stringify(data))}
                 <Text>Add a Course</Text>
             </TouchableOpacity>}
 
             {courses.map(course => (
 
-                <Course course={course} user={uid} navigation={navigation} isProf={data.isProf}/>
+                <Course course={course} user={uid} navigation={navigation} isProf={data.isProf} update={true} data={data}/>
             ))}
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
             {courses.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>You are not signed up for any courses</Text>}

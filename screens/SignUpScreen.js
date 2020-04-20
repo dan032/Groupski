@@ -107,7 +107,6 @@ function SignUpScreen({route, navigation}) {
         if ((e === 1 && !isStudent) || (e === 2 && !isTeacher)){
             onChangeStudent(!isStudent)
             onChangeTeacher(!isTeacher)
-            console.log("yes")
         }
     };
 

@@ -48,13 +48,14 @@ function AddGroupScreen({route, navigation}) {
 
                 if (course.groups === undefined){
                     course["groups"] = {
-                        [key]: group
+                        [key]: true
                     };
                 }
                 else{
                     course.groups = {...course.groups, [key]: true}
-
                 }
+                console.log("KEY: " + key);
+                console.log("Course: " + JSON.stringify(course));
                 onChangeLoading(false);
                 navigation.navigate("Course", {user: user, course: course, update: true})
             }

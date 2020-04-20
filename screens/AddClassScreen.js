@@ -30,6 +30,7 @@ function AddClassScreen({route, navigation}) {
               const ref = database().ref();
               // const courseData = await ref.child('courses').child(code).once('value');
               const courseData = await ref.child('courses').once('value');
+
               if (courseData) {
 
                   const coursesKeys =  Object.keys(courseData.val());
@@ -43,7 +44,7 @@ function AddClassScreen({route, navigation}) {
                           break;
                       }
                   }
-                  console.log(currCourse);
+
                   if (currCourse){
                       const key = currCourse.id;
                       let updates = {};
@@ -51,7 +52,15 @@ function AddClassScreen({route, navigation}) {
                       updates[`/users/${user}/courses/${key}`] = true;
 
                       ref.update(updates);
-                      data.courses[`${key}`] = true;
+                      if (data.courses === undefined){
+                          data.courses = {
+                              [key] : true
+                          }
+                      }
+                      else{
+                          data.courses = {...data.courses, [key]: true}
+                      }
+
                       onChangeLoading(false);
                       navigation.navigate("MainPage", {uid: user, data: data, update: true})
                   }
@@ -65,7 +74,7 @@ function AddClassScreen({route, navigation}) {
               }
           }
           catch (e) {
-              Alert.alert("Error", "Incorrect Course Code or Secret")
+              Alert.alert("Error", e.message);
               onChangeLoading(false)
           }
 
