@@ -9,6 +9,7 @@ import Geolocation from "react-native-geolocation-service";
 
 function GroupScreen({route, navigation}) {
     const {group, user, isProf,course} = route.params;
+    let {update} = route.params
     const [members, onMembersChange] = React.useState([])
     const [isLoading, onLoadingChange] = React.useState(true);
     const [inGroup, onChangeInGroup] = React.useState(true);
@@ -23,6 +24,11 @@ function GroupScreen({route, navigation}) {
             console.log(`removing group in user: ${(await groupInUser.once('value')).val()}`);
             userInGroups.remove();
             groupInUser.remove();
+
+            const ref = database().ref(`/groups/${group.id}`)
+            const updatedGroupData = await ref.once('value');
+            navigation.navigate("Course", {group:updatedGroupData.val(), user, isProf, course, update: true})
+
         }else{
             Alert.alert("Error","You must be a professor to remove members other than yourself.")
         }
@@ -60,21 +66,40 @@ function GroupScreen({route, navigation}) {
         }
     };
 
-    React.useState( () => {
+    const addUser = () => {
+        console.log("Adding user: " + user +  " to group:" + group.id)
+        const ref = database().ref()
+        let updates = {};
+        updates[`/groups/${group.id}/members/${user}`] = true;
+        updates[`/users/${user}/groups/${group.id}`] = true;
+
+        ref.update(updates);
+        group.member = {
+            ...group.member, [user] : true
+        };
+        course.groups = {
+            ...course.groups, [group.id] : true
+        }
+        navigation.navigate("Course", {group, user, isProf, course, update: true})
+    };
+
+    const updateData = () => {
+
         if (group.members){
+            onMembersChange([])
             Object.keys(group.members).map(member => {
                 loadMemberData(member).then(resolve => onMembersChange(members => [...members, resolve])).catch(() => {})
 
             })
         }
-
+        route.params.update = false
         groupCheck().then((res) => {
             onChangeInGroup(res)
             console.log(res)
         })
 
         onLoadingChange(false);
-    });
+    }
 
 
     return (
@@ -85,9 +110,14 @@ function GroupScreen({route, navigation}) {
                     <Text style={styles.member}>{member.memberData.val().name}</Text>
                 </TouchableOpacity>
             ))}
+            {console.log(update)}
+            {route.params.update && updateData()}
             {members.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no members in the group yet"}</Text>}
             {!inGroup &&
-            <TouchableOpacity style={styles.member}>
+            <TouchableOpacity
+                style={styles.member}
+                onPress={() => addUser()}
+            >
                 <Text>{"Join group"}</Text>
             </TouchableOpacity>}
         </View>

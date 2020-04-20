@@ -12,8 +12,19 @@ import Geolocation from "react-native-geolocation-service";
 function Group(props) {
 
     //course deletion here
-    const deleteGroup = () => {
-        console.log('deleting press confirmed')
+    const deleteGroup = async () => {
+        const ref = database().ref();
+        const courseData = await ref.child(`/courses/`).once('value');
+        const userData = await ref.child(`/users`).once('value');
+        const groupId = props.group.idl
+        const courseKeys = Object.keys(courseData.val());
+        const userKeys = Object.keys(userData.val());
+        //
+        // for (let i = 0; i < courseKeys.length; i++){
+        //     if (courseData.val()[courseKeys[i]].groups && groupId in courseData.val()[courseKeys[i]])
+        // }
+
+
     }
 
     const toggleGroup = async () => {
@@ -151,7 +162,7 @@ function Group(props) {
 
         }
         else{
-            props.navigation.navigate('Group', {group: props.group, isProf: props.isProf, user: props.user, course: props.course})
+            props.navigation.navigate('Group', {group: props.group, isProf: props.isProf, user: props.user, course: props.course, update: true})
         }
     };
 
