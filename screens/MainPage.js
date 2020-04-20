@@ -30,13 +30,17 @@ function MainPage({route, navigation}) {
     }
 
     const updateData =  () => {
-        onCourseChange([]);
-        Object.keys(data.courses).map((courseId) => {
 
-            loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
-                console.log("Error courses")
+        if (data.courses){
+            onCourseChange([]);
+            Object.keys(data.courses).map((courseId) => {
+
+                loadCourseData(courseId).then(resolve => onCourseChange(courses => [...courses, resolve])).catch(() => {
+                    console.log("Error courses")
+                });
             });
-        });
+
+        }
         route.params.update = false;
         onLoadingChange(false);
 

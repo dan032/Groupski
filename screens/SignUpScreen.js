@@ -129,6 +129,7 @@ function SignUpScreen({route, navigation}) {
                     placeholder={"Enter Email"}
                 />
                 <TextInput
+                    secureTextEntry = {true}
                     style={styles.txtInput}
                     onChangeText={text=> onChangePassword(text)}
                     value={password}

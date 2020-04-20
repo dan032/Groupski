@@ -82,7 +82,7 @@ function CourseScreen({route, navigation}) {
                 <Text>Add a Group</Text>
             </TouchableOpacity>
             {groups.map((group) => (
-                <Group navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course}/>
+                <Group navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course} data={{data}}/>
         ))}
         {groups.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no groups in the course yet"}</Text>}
         {update && updateCourse()}
