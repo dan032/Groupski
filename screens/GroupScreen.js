@@ -15,15 +15,16 @@ function GroupScreen({route, navigation}) {
     //UI does not update to reflect removed members
     //Need to check if user removing is leader or removing themselves to allow removal
     async function removeFromGroup(member){
-        console.log(user.id);
-        if(isProf || member.id === user.id){
-        const userInGroups = database().ref(`/groups/${group.id}/members/${member.id}`);
-        const groupInUser = database().ref(`/users/${member.id}/groups/${group.id}`);
-        console.log(`removing user in groups: ${(await userInGroups.once('value')).val()}`);
-        console.log(`removing group in user: ${(await groupInUser.once('value')).val()}`);
+        if(isProf || member.id === user){
+            const userInGroups = database().ref(`/groups/${group.id}/members/${member.id}`);
+            const groupInUser = database().ref(`/users/${member.id}/groups/${group.id}`);
+            console.log(`removing user in groups: ${(await userInGroups.once('value')).val()}`);
+            console.log(`removing group in user: ${(await groupInUser.once('value')).val()}`);
+            // userInGroups.remove();
+            // groupInUser.remove();
+        }else{
+            Alert.alert("Error","You must be a professor to remove members other than yourself.")
         }
-        //userInGroups.remove();
-        //groupInUser.remove();
     }
 
     async function loadMemberData(memberId) {
