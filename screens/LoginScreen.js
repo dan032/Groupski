@@ -86,6 +86,7 @@ function LoginScreen({route, navigation}) {
                 placeholder={"Enter Username"}
             />
             <TextInput
+                secureTextEntry = {true}
                 style={styles.txtInput}
                 onChangeText={text=> onChangePassword(text)}
                 value={password}
