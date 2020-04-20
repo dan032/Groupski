@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     scrollView:{marginBottom:25},
     radio:{
         marginTop: 10,
-        margin: 25,
+        margin: 10,
     },
     innerContainer: {
         alignItems: "center",
