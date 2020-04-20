@@ -3,17 +3,44 @@ import {
     View,
     Text,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    Alert
 } from 'react-native';
 
 
 function Course(props) {
+
+    //course deletion here
+    const deleteCourse = () => {
+        console.log('deleting press confirmed')
+    }
+
+    const deleteAlert = () => {
+        //only fire if admin/professor
+        if(props.isProf){
+            console.log("is prof")
+            Alert.alert(
+                'Notice!',
+                'Do you want to delete this course?',
+                [
+                    //delete logic
+                    {text: 'Yes', onPress: () => deleteCourse()},
+                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                ],
+                {cancelable: true},
+            );
+        }
+        else{
+            console.log("not prof, go away")
+        }
+    }
 
     return(
         <TouchableOpacity
             style={styles.course}
             onPress={() => props.navigation.navigate('Course',
                 {course: props.course.courseData.val(), user: props.user, isProf: props.isProf, update: true, data: props.data})}
+            onLongPress={() => {deleteAlert()}}
         >
             {console.log("Course: "+ JSON.stringify(props.course))}
             <Text>{props.course.courseData.val().code}</Text>
