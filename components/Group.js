@@ -16,17 +16,56 @@ function Group(props) {
         console.log('deleting press confirmed')
     }
 
+    const toggleGroup = async () => {
+        const ref = database().ref();
+        const userData = await database().ref(`/users/${props.user}`).once('value');
+        props.group.beingGraded = !props.group.beingGraded;
+        ref.child(`/groups/${props.group.id}`).update(props.group);
+
+        if (props.group.beingGraded){
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    'title': 'Require Permissions',
+                    'message': 'This application requires your location'
+                }
+            );
+
+            let userUpdate = {...userData.val()}
+
+            if (granted === PermissionsAndroid.RESULTS.GRANTED){
+
+                await Geolocation.getCurrentPosition(
+                    position => {
+                        userUpdate.longitude = position.coords.longitude;
+                        userUpdate.latitude = position.coords.latitude;
+                        ref.child(`/users/${props.user}`).update(userUpdate);
+                    },
+                    error => {
+                        Alert.alert("Error", error.message);
+                    },
+                    {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
+                )
+            }
+        }
+
+
+        props.navigation.navigate("Course", {user:props.user, group:props.group, isProf:props.isProf, course:props.course, update: true, data: props.data})
+    }
+
     const deleteAlert = () => {
         //only fire if admin/professor
         if(props.isProf){
             console.log("is prof")
             Alert.alert(
-                'Notice!',
-                'Do you want to delete this group?',
+                'Menu',
+                'Select an option',
                 [
                     //delete logic
-                    {text: 'Yes', onPress: () => deleteGroup()},
                     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    {text: 'Delete', onPress: () => deleteGroup()},
+                    {text: 'Toggle Activation', onPress: () => toggleGroup()},
+
                 ],
                 {cancelable: true},
             );
@@ -34,7 +73,7 @@ function Group(props) {
         else{
             console.log("not prof, go away")
         }
-    }
+    };
 
     // Below distance functions were taken from
     // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula

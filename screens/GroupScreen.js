@@ -19,7 +19,7 @@ function GroupScreen({route, navigation}) {
         console.log(`removing: ${(await ref.once('value')).val()}`)
         //ref.remove();
     }
-    
+
     async function loadMemberData(memberId) {
         const ref = database().ref(`/users/${memberId}`);
         const memberData = await ref.once('value');
@@ -32,43 +32,6 @@ function GroupScreen({route, navigation}) {
             }
 
         });
-    }
-
-    const activateGroup = async () => {
-
-        const ref = database().ref();
-        const userData = await database().ref(`/users/${user}`).once('value');
-        group.beingGraded = true;
-        ref.child(`/groups/${group.id}`).update(group);
-
-        const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-                'title': 'Require Permissions',
-                'message': 'This application requires your location'
-            }
-        );
-
-        let userUpdate = {...userData.val()}
-
-        if (granted === PermissionsAndroid.RESULTS.GRANTED){
-
-                await Geolocation.getCurrentPosition(
-                    position => {
-                        userUpdate.longitude = position.coords.longitude;
-                        userUpdate.latitude = position.coords.latitude;
-                        ref.child(`/users/${user}`).update(userUpdate);
-                        onLoadingChange(false);
-                    },
-                    error => {
-                        Alert.alert("Error", error.message);
-                    },
-                    {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
-                )
-            }
-
-
-        navigation.navigate("Course", {user, group, isProf, course, update: true})
     }
 
 
@@ -92,12 +55,7 @@ function GroupScreen({route, navigation}) {
                 </TouchableOpacity>
             ))}
             {members.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no members in the group yet"}</Text>}
-            {isProf && <TouchableOpacity
-                style={styles.member}
-                onPress={() => activateGroup()}
-            >
-                <Text>Allow Group to be Marked</Text>
-            </TouchableOpacity>}
+
         </View>
     )
 }
