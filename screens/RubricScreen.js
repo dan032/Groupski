@@ -34,8 +34,6 @@ function RubricScreen({route, navigation}) {
         let grade = parseFloat(((c1 + c2 + c3)/3).toFixed(2));
         if (isProf){
             ref.child(`/grades/${groupBeingMarked}/profGrade`).set(grade);
-            ref.child(`/groups/${groupBeingMarked}/beingGraded`).set(false);
-            group.beingGraded = false;
         }
         else{
             const groupKeys = Object.keys(groupData.val());
