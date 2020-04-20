@@ -12,7 +12,7 @@ function Group(props) {
             props.navigation.navigate('Rubric', {group: props.group})
         }
         else{
-            props.navigation.navigate('Group', {group: props.group})
+            props.navigation.navigate('Group', {group: props.group, isProf: props.isProf, user: props.user, course: props.course})
         }
     };
 
@@ -21,6 +21,7 @@ function Group(props) {
             onPress={() => groupClick()}
             style={[styles.group, props.group.beingGraded && styles.active]}
         >
+
             <Text>Group Name: {props.group.title}</Text>
         </TouchableOpacity>
     )

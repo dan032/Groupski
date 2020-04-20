@@ -12,9 +12,8 @@ function Course(props) {
     return(
         <TouchableOpacity
             style={styles.course}
-            onPress={() => props.navigation.navigate('Course', {course: props.course.courseData.val(), user: props.user})}
+            onPress={() => props.navigation.navigate('Course', {course: props.course.courseData.val(), user: props.user, isProf: props.isProf})}
         >
-            {console.log(props.course)}
             <Text>{props.course.courseData.val().code}</Text>
             <Text>{props.course.courseData.val().title}</Text>
         </TouchableOpacity>

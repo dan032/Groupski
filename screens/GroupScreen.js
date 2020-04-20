@@ -2,12 +2,12 @@ import * as React from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet, TouchableOpacity, ScrollView,
 } from 'react-native';
 import database from '@react-native-firebase/database';
 
 function GroupScreen({route, navigation}) {
-    const {group} = route.params;
+    const {group, user, isProf,course} = route.params;
     const [members, onMembersChange] = React.useState([])
     const [isLoading, onLoadingChange] = React.useState(true);
 
@@ -23,6 +23,15 @@ function GroupScreen({route, navigation}) {
             }
 
         });
+    }
+
+    const activateGroup = async () => {
+        group.beingGraded = true;
+        const ref = database().ref(`/groups/${group.id}`)
+        ref.update(group);
+        navigation.navigate("Course", {user, group, isProf, course, update: true})
+
+
     }
 
     React.useState(() => {
@@ -44,6 +53,13 @@ function GroupScreen({route, navigation}) {
                 <Text style={styles.member}>{member.memberData.val().name}</Text>
             ))}
             {members.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no members in the group yet"}</Text>}
+            {console.log("PROF: " + isProf)}
+            {isProf && <TouchableOpacity
+                style={styles.member}
+                onPress={() => activateGroup()}
+            >
+                <Text>Allow Group to be Marked</Text>
+            </TouchableOpacity>}
         </View>
     )
 }

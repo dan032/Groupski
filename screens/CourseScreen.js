@@ -12,7 +12,7 @@ import database from '@react-native-firebase/database';
 
 function CourseScreen({route, navigation}) {
     const [groups, onGroupChange] = React.useState([])
-    const {course, user, group} = route.params;
+    const {course, user, group, isProf} = route.params;
     const [isLoading, onLoadingChange] = React.useState(true);
 
     async function loadGroupData(groupId) {
@@ -44,7 +44,6 @@ function CourseScreen({route, navigation}) {
     };
 
     React.useState(() => {
-        console.log("CS: " + JSON.stringify(course))
         if (course.groups){
             Object.keys(course.groups).map((groupId) =>{
                 loadGroupData(groupId).then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {
@@ -56,6 +55,7 @@ function CourseScreen({route, navigation}) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            {console.log("HI: " + isProf)}
             <Text>{course.code}</Text>
             <TouchableOpacity
                 style={styles.group}
@@ -64,7 +64,7 @@ function CourseScreen({route, navigation}) {
                 <Text>Add a Group</Text>
             </TouchableOpacity>
             {groups.map((group) => (
-                <Group navigation={navigation} group={group.groupData.val()}/>
+                <Group navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course}/>
         ))}
         {groups.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no groups in the course yet"}</Text>}
         {route.params.update && updateCourse()}
