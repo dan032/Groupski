@@ -23,9 +23,18 @@ function LoginScreen({route, navigation}) {
 
 
     function startRegister(){
-        register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid, update: true})).catch(() => {
-            console.log("ERROR BRO")
-        });
+        if(userName == '' || password == ''){
+            console.log("invalid input")
+            Alert.alert('Invalid Input',
+                'You must enter a username and a password!',
+                [{text: 'OK', onPress:() => {}}] ,
+                {cancelable: true})
+        }
+        else{
+            register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid, update: true})).catch(() => {
+                console.log("ERROR BRO")
+            });
+        }
     }
     async function register() {
         try {
