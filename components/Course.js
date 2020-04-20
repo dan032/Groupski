@@ -7,13 +7,38 @@ import {
     Alert
 } from 'react-native';
 
+import database from '@react-native-firebase/database';
+
 
 function Course(props) {
 
     //course deletion here
-    const deleteCourse = () => {
-        console.log('deleting press confirmed')
-    }
+    const deleteCourse = async () => {
+        const courseId = props.course.courseData.val().id;
+        const ref = database().ref();
+        const userData = await ref.child('users').once('value');
+        const groupData = await ref.child('groups').once('value');
+
+        const userKeys = Object.keys(userData.val());
+        const groupKeys = Object.keys(groupData.val());
+
+        for (let i = 0; i < userKeys.length; i++){
+            if (userData.val()[userKeys[i]].courses && courseId in userData.val()[userKeys[i]].courses){
+                ref.child(`/users/${userKeys[i]}/courses/${courseId}`).remove()
+            }
+        }
+
+        for (let i = 0; i < groupKeys.length; i++){
+            if (groupData.val()[groupKeys[i]].course && courseId === groupData.val()[groupKeys[i]].course){
+                ref.child(`/groups/${groupKeys[i]}`).remove()
+            }
+        }
+
+        const updatedUserData = await ref.child(`users/${props.user}`).once('value');
+
+        ref.child(`/courses/${courseId}`).remove();
+        props.navigation.navigate("MainPage", {uid: props.user, data:updatedUserData.val(), update: true})
+    };
 
     const deleteAlert = () => {
         //only fire if admin/professor
