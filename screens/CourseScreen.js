@@ -47,16 +47,18 @@ function CourseScreen({route, navigation}) {
 
     const navBack = () => {
 
-        const keys = Object.keys(course.groups);
-        let newGroups = {};
-        for (let i = 0; i < keys.length; i++){
-            newGroups ={
-                ...newGroups,
-                [keys[i]] : true
+        if (course.groups){
+            const keys = Object.keys(course.groups);
+            let newGroups = {};
+            for (let i = 0; i < keys.length; i++){
+                newGroups ={
+                    ...newGroups,
+                    [keys[i]] : true
+                }
             }
+            data.groups = {...data.courses.groups, ...newGroups}
+            console.log(data)
         }
-        data.groups = {...data.courses.groups, ...newGroups}
-        console.log(data)
 
         navigation.navigate("MainPage", {data: data, uid: user, update: true});
         return true;
@@ -76,6 +78,7 @@ function CourseScreen({route, navigation}) {
                 style={styles.group}
                 onPress={() => navigation.navigate('AddGroup', {user: user, course: course})}
             >
+                {console.log("COURSE: " + JSON.stringify(course))}
                 <Text>Add a Group</Text>
             </TouchableOpacity>
             {groups.map((group) => (

@@ -9,8 +9,13 @@ import {
     StyleSheet, SafeAreaView, ScrollView, TouchableHighlight, TouchableOpacity
 } from 'react-native';
 
-function RubricScreen() {
+import database from '@react-native-firebase/database';
 
+
+
+function RubricScreen({route, navigation}) {
+
+    const {isProf, course, user, group} = route.params;
     var radio_props_implementation = [
         {label: "Poor", value: 0 },
         {label: "Satisfactory", value: 1 },
@@ -20,9 +25,33 @@ function RubricScreen() {
 
 
     //Submission code here
-    const submit = () => {
-        console.log(c1 + c2 + c3)
-    }
+    const submit = async () => {
+        const ref = database().ref();
+        const groupData = await ref.child(`groups`).once('value');
+        const groupBeingMarked = group.id;
+        const currCourseId = course.id;
+        const currUser = user;
+        let grade = parseFloat(((c1 + c2 + c3)/3).toFixed(2));
+        if (isProf){
+            ref.child(`/grades/${groupBeingMarked}/profGrade`).set(grade);
+            ref.child(`/groups/${groupBeingMarked}/beingGraded`).set(false);
+            group.beingGraded = false;
+        }
+        else{
+            const groupKeys = Object.keys(groupData.val());
+            let markingGroup = {};
+            for (let i = 0; i < groupKeys.length; i++){
+                const tmp  = groupData.val()[groupKeys[i]];
+                if (tmp.course === currCourseId && currUser in tmp.members){
+                    markingGroup = tmp;
+                }
+            }
+
+            ref.child(`/grades/${groupBeingMarked}/${markingGroup.id}`).set(grade)
+        }
+
+        navigation.navigate("MainPage", {isProf: isProf, course: course, user: user, group: group})
+    };
 
     //results are stored here as 0,1,2,3 where c1 is implementation, c2 design etc
     var c1,c2,c3;

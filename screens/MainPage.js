@@ -70,7 +70,6 @@ function MainPage({route, navigation}) {
                 style={styles.course}
                 onPress={() => navigation.navigate('AddClass', {user: uid, data: data})}
             >
-                {console.log("MP: " + JSON.stringify(data))}
                 <Text>Add a Course</Text>
             </TouchableOpacity>}
 
