@@ -15,10 +15,17 @@ function GroupScreen({route, navigation}) {
 
     //UI does not update to reflect removed members
     //Need to check if user removing is leader or removing themselves to allow removal
-    async function removeFromGroup(memberId){
-        const ref = database().ref(`/groups/${group.id}/members/${memberId}`);
-        console.log(`removing: ${(await ref.once('value')).val()}`)
-        //ref.remove();
+    async function removeFromGroup(member){
+        if(isProf || member.id === user){
+            const userInGroups = database().ref(`/groups/${group.id}/members/${member.id}`);
+            const groupInUser = database().ref(`/users/${member.id}/groups/${group.id}`);
+            console.log(`removing user in groups: ${(await userInGroups.once('value')).val()}`);
+            console.log(`removing group in user: ${(await groupInUser.once('value')).val()}`);
+            userInGroups.remove();
+            groupInUser.remove();
+        }else{
+            Alert.alert("Error","You must be a professor to remove members other than yourself.")
+        }
     }
 
     async function loadMemberData(memberId) {
@@ -74,7 +81,7 @@ function GroupScreen({route, navigation}) {
         <View style={styles.container}>
 
             {members.map(member => (
-                <TouchableOpacity onLongPress={()=>removeFromGroup(member.memberData.val().id)}>
+                <TouchableOpacity onLongPress={()=>removeFromGroup(member.memberData.val())}>
                     <Text style={styles.member}>{member.memberData.val().name}</Text>
                 </TouchableOpacity>
             ))}
