@@ -57,7 +57,6 @@ function CreateClassScreen({route, navigation}) {
                     updates[`/users/${user}/courses/${key}`] = true;
                     ref.update(updates)
                     ref.child('courses').child(key).update(newCourse);
-                    console.log(JSON.stringify(data))
 
                     if (data.courses === undefined){
                         data.courses = {[key] : true}
