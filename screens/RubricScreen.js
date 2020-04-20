@@ -10,13 +10,6 @@ import {
 } from 'react-native';
 
 function RubricScreen() {
-    const [choices, setChoices] = useState([
-        {id: 0, description: "Default Choice"}
-        ]);
-
-    const [impDes, setImpDesc] = useState();
-
-
 
     var radio_props_implementation = [
         {label: "Poor", value: 0 },
@@ -25,7 +18,13 @@ function RubricScreen() {
         {label: "Excelent", value: 3 }
     ];
 
-    //results are stored here
+
+    //Submission code here
+    const submit = () => {
+        console.log(c1 + c2 + c3)
+    }
+
+    //results are stored here as 0,1,2,3 where c1 is implementation, c2 design etc
     var c1,c2,c3;
 
     const onPressImp = (e, category) => {
@@ -45,93 +44,53 @@ function RubricScreen() {
         else{
             console.log("Unknown Category selected")
         }
-        // c1=e;
-        // console.log(category)
-        // console.log(e)
-        // console.log(choices.id)
-
-        // ReactDOM.getElementById("1");
     };
 
     return (
         <SafeAreaView>
             <ScrollView style={styles.scrollView}>
-            <View style={styles.innerContainer}>
-            <Text style={{marginTop: 20, fontSize: 20, fontWeight: "bold"}}>Evaluation Rubric</Text>
+                <View style={styles.innerContainer}>
+                    <Text style={{marginTop: 20, fontSize: 20, fontWeight: "bold"}}>Evaluation Rubric</Text>
 
-            <View style={styles.eval}>
-                {/*<TouchableOpacity*/}
-                {/*    style={styles.selected}*/}
-                {/*    activeOpacity={0.6}*/}
-                {/*    underlayColor="#DDDDDD"*/}
-                {/*    onPress={onPressImp("1")}>*/}
-                <Text nativeID="1" style={styles.subHeading}>Implementation</Text>
-                {/*</TouchableOpacity>*/}
-                <Text style={styles.description}>The the presenters has implemented all features</Text>
-                <RadioForm
-                    radio_props={radio_props_implementation}
-                    initial={1}
-                    formHorizontal = {true}
-                    labelHorizontal = {false}
-                    // onPress={(value) => {setChoices(value)}} //works,
-                    onPress={(value) => {onPressImp(value, "Implementation")}} //works,
-                    // onPress={(value) => {this.setState({value:value})}}
+                    <View style={styles.eval}>
 
-                    labelStyle={styles.radio}
-                />
+                        <Text nativeID="1" style={styles.subHeading}>Implementation</Text>
+                        <Text style={styles.description}>The the presenters has implemented all features</Text>
+                        <RadioForm
+                            radio_props={radio_props_implementation}
+                            initial={-1}
+                            formHorizontal = {true}
+                            labelHorizontal = {false}
+                            onPress={(value) => {onPressImp(value, "Implementation")}} //works,
+                            labelStyle={styles.radio}
+                        />
 
-                    <Text style={styles.subHeading}>Design</Text>
-                <Text style={styles.description}>The the presentation meets design standards </Text>
-                <RadioForm
-                    radio_props={radio_props_implementation}
-                    initial={1}
-                    formHorizontal = {true}
-                    labelHorizontal = {false}
-                    // onPress={(value) => {setChoices(value)}} //works,
-                    onPress={(value) => {onPressImp(value, "Design")}} //works,
-                    // onPress={(value) => {this.setState({value:value})}}
+                        <Text style={styles.subHeading}>Design</Text>
+                        <Text style={styles.description}>The the presentation meets design standards </Text>
+                        <RadioForm
+                            radio_props={radio_props_implementation}
+                            initial={-1}
+                            formHorizontal = {true}
+                            labelHorizontal = {false}
+                            onPress={(value) => {onPressImp(value, "Design")}} //works,
 
-                    labelStyle={styles.radio}
-                />
+                            labelStyle={styles.radio}
+                        />
 
-                <Text style={styles.subHeading}>Delivery</Text>
-                <Text style={styles.description}>The presentation was delivered in a manner expected from college students  </Text>
-                <RadioForm
-                    radio_props={radio_props_implementation}
-                    initial={1}
-                    formHorizontal = {true}
-                    labelHorizontal = {false}
-                    // onPress={(value) => {setChoices(value)}} //works,
-                    onPress={(value) => {onPressImp(value, "Delivery")}} //works,
-                    // onPress={(value) => {this.setState({value:value})}}
+                        <Text style={styles.subHeading}>Delivery</Text>
+                        <Text style={styles.description}>The presentation was delivered in a manner expected from college students  </Text>
+                        <RadioForm
+                            radio_props={radio_props_implementation}
+                            initial={-1}
+                            formHorizontal = {true}
+                            labelHorizontal = {false}
+                            onPress={(value) => {onPressImp(value, "Delivery")}} //works,
+                            labelStyle={styles.radio}
+                        />
+                    </View>
 
-                    labelStyle={styles.radio}
-                />
-
-                {/*<Text style={styles.choices}><Text style={{color:"red"}}>Poor:</Text> {this.state.impDes}</Text>*/}
-                {/*<Text style={styles.choices}><Text style={{color:"red"}}>Poor:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-                {/*<Text style={styles.choices}><Text style={{color:"orange"}}>Satisfactory:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-                {/*<Text style={styles.choices}><Text style={{color:"blue"}}>Good: </Text>The student did so andsnllklklklklklkklklo</Text>*/}
-                {/*<Text style={styles.choices}><Text style={{color:"green"}}>Excelent:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-            </View>
-            {/*<View style={styles.eval}>*/}
-            {/*    <Text style={styles.subHeading}>Design</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"red"}}>Poor:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"orange"}}>Satisfactory:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"blue"}}>Good: </Text>The student did so andsnllklklklklklkklklo</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"green"}}>Excelent:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-
-            {/*</View>*/}
-            {/*<View style={styles.eval}>*/}
-            {/*    <Text style={styles.subHeading}>Delivery</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"red"}}>Poor:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"orange"}}>Satisfactory:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"blue"}}>Good: </Text>The student did so andsnllklklklklklkklklo</Text>*/}
-            {/*    <Text style={styles.choices}><Text style={{color:"green"}}>Excelent:</Text> The student did so andsnllklklklklklkklklo</Text>*/}
-            {/*</View>*/}
-
-            <Button title={"Submit"}></Button>
-        </View>
+                    <Button title={"Submit"} onPress={submit}></Button>
+                </View>
             </ScrollView >
         </SafeAreaView>
     )
