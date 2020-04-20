@@ -14,7 +14,7 @@ function GroupScreen({route, navigation}) {
 
     async function removeFromGroup(memberId){
         const ref = database().ref(`/groups/${group.id}/members/${memberId}`);
-        console.log(`removing: ${ref.once('value')}`)
+        console.log(`removing: ${(await ref.once('value')).val()}`)
         //ref.remove();
     }
 

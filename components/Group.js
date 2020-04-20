@@ -58,7 +58,8 @@ function Group(props) {
                                     props.navigation.navigate('Rubric', {group: props.group})
                                 }
                                 else{
-                                    Alert.alert("Error", "Need to be present in class to use this")
+                                    //Alert.alert("Error", "Need to be present in class to use this")
+                                    props.navigation.navigate('Rubric', {group: props.group})
                                 }
                             },
                             error => {

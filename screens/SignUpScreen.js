@@ -48,8 +48,10 @@ function SignUpScreen({route, navigation}) {
                     }
                 );
                 let user = {};
+                user['id'] = uid;
                 user['name'] = userName;
                 user['email'] = email;
+                user['isLeader'] = false;
                 user['isProf'] = isTeacher;
                 if (granted === PermissionsAndroid.RESULTS.GRANTED){
                     try{
