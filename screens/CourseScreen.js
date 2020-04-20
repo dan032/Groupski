@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     TextInput,
     StyleSheet, ScrollView,
+    BackHandler
 } from 'react-native';
 
 import Group from '../components/Group';
@@ -12,7 +13,7 @@ import database from '@react-native-firebase/database';
 
 function CourseScreen({route, navigation}) {
     const [groups, onGroupChange] = React.useState([])
-    const {course, user, group} = route.params;
+    const {course, user, group, isProf, update, data} = route.params;
     const [isLoading, onLoadingChange] = React.useState(true);
 
     async function loadGroupData(groupId) {
@@ -33,6 +34,7 @@ function CourseScreen({route, navigation}) {
 
     const updateCourse = () => {
         onGroupChange([]);
+
         if (course.groups) {
             Object.keys(course.groups).map((groupId) => {
                 loadGroupData(groupId).then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {
@@ -43,15 +45,29 @@ function CourseScreen({route, navigation}) {
         onLoadingChange(false);
     };
 
-    React.useState(() => {
-        if (course.groups){
-            Object.keys(course.groups).map((groupId) =>{
-                loadGroupData(groupId).then(resolve => onGroupChange(groups => [...groups, resolve])).catch(() => {
-                });
-            })
+    const navBack = () => {
+
+        const keys = Object.keys(course.groups);
+        let newGroups = {};
+        for (let i = 0; i < keys.length; i++){
+            newGroups ={
+                ...newGroups,
+                [keys[i]] : true
+            }
         }
-        onLoadingChange(false);
-        }, []);
+        data.groups = {...data.courses.groups, ...newGroups}
+        console.log(data)
+
+        navigation.navigate("MainPage", {data: data, uid: user, update: true});
+        return true;
+    }
+
+    React.useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", navBack);
+        return () => {
+            BackHandler.removeEventListener("hardwareBackPress", navBack);
+        }
+    },[])
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -63,10 +79,10 @@ function CourseScreen({route, navigation}) {
                 <Text>Add a Group</Text>
             </TouchableOpacity>
             {groups.map((group) => (
-                <Group navigation={navigation} group={group.groupData.val()}/>
+                <Group navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course}/>
         ))}
         {groups.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no groups in the course yet"}</Text>}
-        {route.params.update && updateCourse()}
+        {update && updateCourse()}
         </ScrollView>
     )
 }

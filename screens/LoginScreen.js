@@ -23,7 +23,7 @@ function LoginScreen({route, navigation}) {
 
 
     function startRegister(){
-        register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid})).catch(() => {
+        register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid, update: true})).catch(() => {
             console.log("ERROR BRO")
         });
     }

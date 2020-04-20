@@ -48,8 +48,10 @@ function SignUpScreen({route, navigation}) {
                     }
                 );
                 let user = {};
+                user['id'] = uid;
                 user['name'] = userName;
                 user['email'] = email;
+                user['isLeader'] = false;
                 user['isProf'] = isTeacher;
                 if (granted === PermissionsAndroid.RESULTS.GRANTED){
                     try{
@@ -107,7 +109,6 @@ function SignUpScreen({route, navigation}) {
         if ((e === 1 && !isStudent) || (e === 2 && !isTeacher)){
             onChangeStudent(!isStudent)
             onChangeTeacher(!isTeacher)
-            console.log("yes")
         }
     };
 

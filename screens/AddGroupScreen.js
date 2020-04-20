@@ -31,19 +31,31 @@ function AddGroupScreen({route, navigation}) {
             }
             else{
                 let updates = {};
-                const courseCode = course.code;
+                console.log(course)
+                const courseCode = course.id;
                 let group = {
+                    id: key,
                     beingGraded: false,
                     course: courseCode,
                     title: groupName
                 };
                 updates[`/groups/${key}/members/${user}`] = true;
                 updates[`/users/${user}/groups/${key}`] = true;
-                updates[`/courses/${course.code}/groups/${key}`] = true;
+                updates[`/courses/${course.id}/groups/${key}`] = true;
 
                 ref.child('groups').child(key).update(group);
                 ref.update(updates);
-                course.groups[key] = group;
+
+                if (course.groups === undefined){
+                    course["groups"] = {
+                        [key]: true
+                    };
+                }
+                else{
+                    course.groups = {...course.groups, [key]: true}
+                }
+                console.log("KEY: " + key);
+                console.log("Course: " + JSON.stringify(course));
                 onChangeLoading(false);
                 navigation.navigate("Course", {user: user, course: course, update: true})
             }
