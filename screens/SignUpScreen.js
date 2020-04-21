@@ -111,8 +111,8 @@ function SignUpScreen({navigation}) {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.innerContainer}>
+        <ScrollView>
+            <View style={style.container}>
                 <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Sign up Page</Text>
                 <TextInput
                     style={[style.unit,style.txtInput]}
@@ -168,9 +168,6 @@ function SignUpScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
-    innerContainer: {
-        alignItems: "center",
-    },
     checkBoxes: {
         backgroundColor: "beige",
         borderWidth: 1,

@@ -32,5 +32,8 @@ export default StyleSheet.create({
     },
     lightblue: {
         backgroundColor: "lightblue"
-    }
+    },
+    container: {
+        alignItems: "center",
+    },
 })

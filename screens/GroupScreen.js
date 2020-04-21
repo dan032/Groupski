@@ -121,7 +121,7 @@ function GroupScreen({route, navigation}) {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={style.container}>
             <Text style={styles.header}>{group.title} Page</Text>
             <View style={styles.finalGradeContainer}>
                 {group.finalGrade && (inThisGroup || isProf) &&
@@ -150,9 +150,6 @@ function GroupScreen({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-    },
     header: {
         fontSize: 25,
         marginTop: 20,

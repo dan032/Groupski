@@ -1,7 +1,7 @@
 import * as React from 'react';
 import RadioForm from 'react-native-simple-radio-button';
 import database from '@react-native-firebase/database';
-
+import style from '../css/style';
 import {
     View,
     Button,
@@ -64,7 +64,7 @@ function RubricScreen({route, navigation}) {
     return (
         <SafeAreaView>
             <ScrollView style={styles.scrollView}>
-                <View style={styles.innerContainer}>
+                <View style={style.container}>
                     <Text style={{marginTop: 20, fontSize: 20, fontWeight: "bold"}}>Evaluation Rubric</Text>
 
                     <View style={styles.eval}>
@@ -117,9 +117,6 @@ const styles = StyleSheet.create({
     radio:{
         marginTop: 10,
         margin: 10,
-    },
-    innerContainer: {
-        alignItems: "center",
     },
     selected:{
         fontSize:30

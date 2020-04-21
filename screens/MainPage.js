@@ -3,7 +3,6 @@ import style from '../css/style';
 import {
     ScrollView,
     Text,
-    StyleSheet,
     TouchableOpacity,
     ActivityIndicator,
 } from 'react-native';
@@ -44,7 +43,7 @@ function MainPage({route, navigation}) {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={style.container}>
 
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Welcome to the Main Page!</Text>
             <Text style={{marginTop: 10, fontSize: 20}}>Hello {data.name}</Text>
@@ -72,10 +71,4 @@ function MainPage({route, navigation}) {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-    },
-
-});
 export default MainPage;

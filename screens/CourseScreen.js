@@ -4,7 +4,6 @@ import style from '../css/style';
 import {
     Text,
     TouchableOpacity,
-    StyleSheet,
     ScrollView,
     BackHandler,
     ActivityIndicator,
@@ -69,7 +68,7 @@ function CourseScreen({route, navigation}) {
     },[]);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={style.container}>
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>{course.code} Homepage</Text>
             <Text style={{marginTop: 10, fontSize: 20}}>List of groups</Text>
             <TouchableOpacity
@@ -87,12 +86,5 @@ function CourseScreen({route, navigation}) {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-    },
-});
-
 
 export default CourseScreen;

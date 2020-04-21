@@ -5,7 +5,9 @@ import {
     Text,
     TouchableOpacity,
     TextInput,
-    StyleSheet, ScrollView, ActivityIndicator, Alert,
+    ScrollView,
+    ActivityIndicator,
+    Alert,
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -86,7 +88,7 @@ function CreateClassScreen({route, navigation}) {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={style.container}>
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Create a Course</Text>
             <TextInput
                 style={[style.unit, style.txtInput]}
@@ -126,11 +128,5 @@ function CreateClassScreen({route, navigation}) {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-    },
-});
 
 export default CreateClassScreen

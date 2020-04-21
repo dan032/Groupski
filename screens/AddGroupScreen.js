@@ -3,7 +3,6 @@ import style from '../css/style';
 import {
     View,
     Text,
-    StyleSheet,
     TextInput,
     TouchableOpacity,
     ActivityIndicator,
@@ -83,7 +82,7 @@ function AddGroupScreen({route, navigation}) {
     };
 
     return(
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={style.container}>
             <Text style={{marginTop: 20, fontSize: 20}}>Create a Group</Text>
             <TextInput
                 style={[style.unit, style.txtInput]}
@@ -106,11 +105,6 @@ function AddGroupScreen({route, navigation}) {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-    },
-});
 
 export default AddGroupScreen
 

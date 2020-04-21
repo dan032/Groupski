@@ -84,7 +84,7 @@ function LoginScreen({route, navigation}) {
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={style.container}>
             {route.params && route.params.message && <Text style={{color:"green", marginTop: 20}}>{route.params.message}</Text>}
             <Image style={styles.img} source={require('../images/Groupski.png')}/>
             <Text style={{marginTop: 20, fontSize: 20}}>Login Page</Text>
@@ -120,9 +120,6 @@ function LoginScreen({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-    },
     img: {
         marginTop: 20,
         width: 300,
