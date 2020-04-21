@@ -2,7 +2,9 @@ import * as React from 'react';
 import {
     ScrollView,
     Text,
-    StyleSheet, TouchableOpacity, ActivityIndicator,
+    StyleSheet,
+    TouchableOpacity,
+    ActivityIndicator,
 } from 'react-native';
 
 import Course from '../components/Course';
@@ -59,9 +61,9 @@ function MainPage({route, navigation}) {
                 <Text>Add a Course</Text>
             </TouchableOpacity>}
 
-            {courses.map(course => (
+            {courses.map((course, i) => (
 
-                <Course course={course} user={uid} navigation={navigation} isProf={data.isProf} update={true} data={data}/>
+                <Course key={i} course={course} user={uid} navigation={navigation} isProf={data.isProf} update={true} data={data}/>
             ))}
             {route.params.update && updateData() && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
             {courses.length === 0 && !route.params.update && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>You are not signed up for any courses</Text>}

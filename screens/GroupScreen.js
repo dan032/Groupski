@@ -10,7 +10,6 @@ import database from '@react-native-firebase/database';
 
 function GroupScreen({route, navigation}) {
     const {group, user, isProf,course} = route.params;
-    let {update} = route.params;
     const [members, onMembersChange] = React.useState([]);
     const [isLoading, onLoadingChange] = React.useState(true);
     const [inGroup, onChangeInGroup] = React.useState(true);
@@ -108,8 +107,8 @@ function GroupScreen({route, navigation}) {
                     {`Final Grade is: ${group.finalGrade}`}
                 </Text>}
             </View>
-            {members.map(member => (
-                <TouchableOpacity style={styles.member} onLongPress={()=>removeFromGroup(member.memberData.val())}>
+            {members.map((member, i) => (
+                <TouchableOpacity key={i} style={styles.member} onLongPress={()=>removeFromGroup(member.memberData.val())}>
                     <Text >{member.memberData.val().name}</Text>
                 </TouchableOpacity>
             ))}

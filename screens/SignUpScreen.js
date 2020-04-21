@@ -14,7 +14,7 @@ import { CheckBox} from 'react-native-elements'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
-function SignUpScreen({route, navigation}) {
+function SignUpScreen({navigation}) {
     const [userName, onChangeUserName] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [email, onChangeEmail] = React.useState('');
@@ -34,7 +34,7 @@ function SignUpScreen({route, navigation}) {
             onChangeLoading(true);
             auth()
             .createUserWithEmailAndPassword(email, password)
-            .then(async (res) => {
+            .then(async () => {
                 await auth().signInWithEmailAndPassword(email, password);
                 const uid = auth().currentUser.uid;
                 const ref = database().ref(`/users/${uid}`);
