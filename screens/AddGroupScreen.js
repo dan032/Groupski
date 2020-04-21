@@ -105,6 +105,5 @@ function AddGroupScreen({route, navigation}) {
     )
 }
 
-
 export default AddGroupScreen
 

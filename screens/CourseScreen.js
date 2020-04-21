@@ -71,12 +71,15 @@ function CourseScreen({route, navigation}) {
         <ScrollView contentContainerStyle={style.container}>
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>{course.code} Homepage</Text>
             <Text style={{marginTop: 10, fontSize: 20}}>List of groups</Text>
-            <TouchableOpacity
-                style={[style.unit, style.lightgreen]}
-                onPress={() => navigation.navigate('AddGroup', {user: user, course: course})}
-            >
-                <Text>Add a Group</Text>
-            </TouchableOpacity>
+            { !isProf &&
+                <TouchableOpacity
+                    style={[style.unit, style.lightgreen]}
+                    onPress={() => navigation.navigate('AddGroup', {user: user, course: course})}
+                >
+                    <Text>Add a Group</Text>
+                </TouchableOpacity>
+            }
+
             {groups.map((group, i) => (
                 <Group key={i} navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course} data={{data}}/>
         ))}

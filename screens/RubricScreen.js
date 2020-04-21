@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
         padding: 20,
         marginBottom: 10,
         backgroundColor: "#fdf5e6"
-
     },
     eval:{
       marginTop: 10,
