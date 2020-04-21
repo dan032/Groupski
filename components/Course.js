@@ -40,6 +40,7 @@ function Course(props) {
         props.navigation.navigate("MainPage", {uid: props.user, data:updatedUserData.val(), update: true})
     };
 
+    // This beautifully function was written by TAHA and NATHAN and definitely not Dan
     const calculateGrades = () => {
         const clickedCourse = props.course.courseData.val()
         const profGradeKeys = Object.keys(clickedCourse.profGrades)
@@ -51,7 +52,6 @@ function Course(props) {
         for (let i = 0; i < profGradeKeys.length; i++){
             totalProfGrade += clickedCourse.profGrades[profGradeKeys[i]];
         }
-
 
         for (let i = 0; i < groupKeys.length; i++){
             const currGroup = groupKeys[i];
@@ -83,50 +83,7 @@ function Course(props) {
                 currGroupAvgMark = parseFloat(((currGroupAvgMark)/.12).toFixed(2))
                 ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
             }
-
-
         }
-        // iterate through groups
-            // totalMarked = 0
-            // totalGiven = 0
-            // profMark = profGrades[group]
-            // iterate through student grades
-                // iterate through marking groups
-                    // if markedGroup = inital group
-                        // totalGiven += mark
-                    // if markingGroup = initial group
-                        // totalMark += mark
-            // if total - prof = +-5%
-                // push to db ((totalGiven/possibleMark*numberOfGroups) * 50 + (profMark/possibleMark) * 50) - 5
-            // else
-                // push to db ((totalGiven/possibleMark*numberOfGroups) * 50 + (profMark/possibleMark) * 50)
-
-
-
-
-
-
-
-        //
-        // for (let i = 0; i < studentGradeKeys.length; i++){
-        //
-        //
-        //     const markingGradeKeys = Object.keys(clickedCourse.studentGrades[studentGradeKeys[i]])
-        //     let total = 0;
-        //     const perfectGrade = markingGradeKeys.length * 12;
-        //     const profGrade = clickedCourse.profGrades[studentGradeKeys[i]];
-        //     totalProfGrade += profGrade;
-        //
-        //     for (let j = 0; j < markingGradeKeys.length; j++){
-        //         total += clickedCourse.studentGrades[studentGradeKeys[i]][markingGradeKeys[j]]
-        //         totalClassGrade += clickedCourse.studentGrades[studentGradeKeys[i]][markingGradeKeys[j]]
-        //     }
-        //
-        //
-        //     total = parseFloat(((total/perfectGrade * 50) + (profGrade/12 * 50)).toFixed(2));
-        //     ref.child(`/groups/${studentGradeKeys[i]}/finalGrade`).set(total)
-
-
     }
 
     const deleteAlert = () => {

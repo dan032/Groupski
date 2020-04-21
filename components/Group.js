@@ -121,50 +121,53 @@ function Group(props) {
             const userData = await ref.child(`/users/${props.user}`).once('value');
 
             let userUpdate = {...userData.val()};
+            let hasGroup = false;
 
-            PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-                .then( async (granted) => {
-                    console.log(granted)
-                    if (granted){
-                        await Geolocation.getCurrentPosition(
-                            position => {
-                                userUpdate.longitude = position.coords.longitude;
-                                userUpdate.latitude = position.coords.latitude;
-                                ref.child(`/users/${props.user}`).update(userUpdate);
+            if (userUpdate.groups){
+                const userGroupKeys = Object.keys(userUpdate.groups);
+                const courseGroupKeys = Object.keys(props.course.groups);
 
-                                const distance = getDistanceFromLatLonInKm(userUpdate.latitude, userUpdate.longitude, profData.val().latitude, profData.val().longitude)
-                                console.log(distance)
-                                if (distance  >= 0){
-                                    props.navigation.navigate('Rubric', {group: props.group, user: props.user, isProf: props.isProf, course: props.course, update: true})
-                                }
-                            },
-                            error => {
-                                Alert.alert("Error", error.message);
-                            },
-                            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
-                        )
-
+                console.log(courseGroupKeys)
+                for (let i = 0; i < userGroupKeys.length; i++){
+                    console.log(userGroupKeys[i])
+                    if (courseGroupKeys.includes(userGroupKeys[i])){
+                        hasGroup = true;
                     }
-                    else{
-                        Alert.alert("Error", "Go into settings to enable location services")
-                    }
-                }).catch(err => {
+                }
+            }
+
+            if (hasGroup){
+                PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+                    .then( async (granted) => {
+                        console.log(granted)
+                        if (granted){
+                            await Geolocation.getCurrentPosition(
+                                position => {
+                                    userUpdate.longitude = position.coords.longitude;
+                                    userUpdate.latitude = position.coords.latitude;
+                                    ref.child(`/users/${props.user}`).update(userUpdate);
+
+                                    const distance = getDistanceFromLatLonInKm(userUpdate.latitude, userUpdate.longitude, profData.val().latitude, profData.val().longitude)
+                                    if (distance  >= 0){
+                                        props.navigation.navigate('Rubric', {group: props.group, user: props.user, isProf: props.isProf, course: props.course, update: true})
+                                    }
+                                },
+                                error => {
+                                    Alert.alert("Error", error.message);
+                                },
+                                {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
+                            )
+                        }
+                        else{
+                            Alert.alert("Error", "Go into settings to enable location services")
+                        }
+                    }).catch(err => {
                     console.log("C: " + err.message)
                 })
-
-
-
-
-            // navigation.navigate("Course", {user, group, isProf, course, update: true})
-
-
-
-            // Get user location
-
-            // Save user location
-
-            // Calculate Distance, if it within 100m let them into rubric
-
+            }
+            else{
+                Alert.alert("Error", "You need to be in a group to mark")
+            }
         }
         else{
             props.navigation.navigate('Group', {group: props.group, isProf: props.isProf, user: props.user, course: props.course, update: true})
