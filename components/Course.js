@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-    View,
     Text,
     TouchableOpacity,
     StyleSheet,
@@ -12,7 +11,7 @@ import database from '@react-native-firebase/database';
 
 function Course(props) {
 
-    //course deletion here
+    // Allows the teacher to delete a course
     const deleteCourse = async () => {
         const courseId = props.course.courseData.val().id;
         const ref = database().ref();
@@ -22,69 +21,83 @@ function Course(props) {
         const userKeys = Object.keys(userData.val());
         const groupKeys = Object.keys(groupData.val());
 
+        // Removes the course from all users
         for (let i = 0; i < userKeys.length; i++){
             if (userData.val()[userKeys[i]].courses && courseId in userData.val()[userKeys[i]].courses){
                 ref.child(`/users/${userKeys[i]}/courses/${courseId}`).remove()
             }
         }
 
+        // Removes the course from all groups
         for (let i = 0; i < groupKeys.length; i++){
             if (groupData.val()[groupKeys[i]].course && courseId === groupData.val()[groupKeys[i]].course){
                 ref.child(`/groups/${groupKeys[i]}`).remove()
             }
         }
 
-        const updatedUserData = await ref.child(`users/${props.user}`).once('value');
-
+        //Removes the course from the course table
         ref.child(`/courses/${courseId}`).remove();
+
+        const updatedUserData = await ref.child(`users/${props.user}`).once('value');
         props.navigation.navigate("MainPage", {uid: props.user, data:updatedUserData.val(), update: true})
     };
 
-    // This beautifully function was written by TAHA and NATHAN and definitely not Dan
+    // This 'beautifully' function was definitely not written by Dan. O(N^3) is the best big O
+
+    // It calculates the final grade for all group presentation grades.
+    // 50% of the grade comes from other groups, 50% of the grade comes from the prof,
+    // but if a groups's total submitted marks (grading other groups) is more than 5% away from the prof's,
+    // then they will incur a 0.5 out of 12 penalty on their grade.
     const calculateGrades = () => {
-        const clickedCourse = props.course.courseData.val()
-        const profGradeKeys = Object.keys(clickedCourse.profGrades)
-        const studentGradeKeys = Object.keys(clickedCourse.studentGrades)
-        const groupKeys = Object.keys(clickedCourse.groups);
-        const ref = database().ref();
-        let totalProfGrade = 0;
+        const clickedCourse = props.course.courseData.val();
 
-        for (let i = 0; i < profGradeKeys.length; i++){
-            totalProfGrade += clickedCourse.profGrades[profGradeKeys[i]];
+        if (!clickedCourse.profGrades && !clickedCourse.studentGrades){
+            Alert.alert("Error","Grading has not been done for this course yet")
         }
+        else{
+            const studentGradeKeys = Object.keys(clickedCourse.studentGrades);
+            const groupKeys = Object.keys(clickedCourse.groups);
+            const ref = database().ref();
 
-        for (let i = 0; i < groupKeys.length; i++){
-            const currGroup = groupKeys[i];
-            let totalMarked = 0;
-            let totalGiven = 0;
-            const profMark = clickedCourse.profGrades[currGroup];
+            // Iterate through all groups in the course
+            for (let i = 0; i < groupKeys.length; i++) {
+                const currGroup = groupKeys[i];
+                let totalMarked = 0;    // the sum of all the grades they've given other groups
+                let totalGiven = 0;     // the sum of all the grades other groups have given them
+                const profMark = clickedCourse.profGrades[currGroup];   // the grade the prof gave for the current course
 
-            for (let j = 0; j < studentGradeKeys.length; j++){
-                const markedGroup = clickedCourse.studentGrades[studentGradeKeys[j]]
-                const markingGroupKeys = Object.keys(markedGroup);
-                for (let k = 0; k < markingGroupKeys.length; k++){
-                    const markingGroupGrades = markedGroup[markingGroupKeys[k]]
+                // Iterate through all marked groups within student grades
+                for (let j = 0; j < studentGradeKeys.length; j++) {
+                    const markedGroup = clickedCourse.studentGrades[studentGradeKeys[j]];   // the group that was marked
+                    const markingGroupKeys = Object.keys(markedGroup);
 
-                    if (studentGradeKeys[j] === currGroup){
-                        totalGiven += markingGroupGrades
-                    }
+                    // Iterate through all marking groups within student grades
+                    for (let k = 0; k < markingGroupKeys.length; k++) {
+                        const markingGroupGrades = markedGroup[markingGroupKeys[k]];       // the group that was marking
 
-                    if (studentGradeKeys[k] === currGroup){
-                        totalMarked += markingGroupGrades
+                        if (studentGradeKeys[j] === currGroup) {
+                            totalGiven += markingGroupGrades;
+                        }
+
+                        if (studentGradeKeys[k] === currGroup) {
+                            totalMarked += markingGroupGrades;
+                        }
                     }
                 }
-            }
 
-            let currGroupAvgMark = totalMarked/groupKeys.length;
-            if (currGroupAvgMark/profMark < 0.95 || currGroupAvgMark/profMark > 0.95){
-                currGroupAvgMark = parseFloat(((currGroupAvgMark-.5)/.12).toFixed(2))
-                ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
-            }else{
-                currGroupAvgMark = parseFloat(((currGroupAvgMark)/.12).toFixed(2))
-                ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
+                // If the group's mark is within 5% of the prof then no penalty,
+                // otherwise there will be a 0.5/12 grade penalty
+                let currGroupAvgMark = totalMarked / groupKeys.length;
+                if (currGroupAvgMark / profMark < 0.95 || currGroupAvgMark / profMark > 0.95) {
+                    currGroupAvgMark = parseFloat((((currGroupAvgMark-.5)/12)*.5) + (profMark/12)*.5).toFixed(2);
+                    ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
+                } else {
+                    currGroupAvgMark = parseFloat((((currGroupAvgMark)/12)*.5) + (profMark/12)*.5).toFixed(2);
+                    ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
+                }
             }
         }
-    }
+    };
 
     const deleteAlert = () => {
         //only fire if admin/professor
@@ -101,7 +114,7 @@ function Course(props) {
                 {cancelable: true},
             );
         }
-    }
+    };
 
     return(
         <TouchableOpacity
@@ -129,6 +142,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "lightblue"
-}})
+}});
 
 export default Course;

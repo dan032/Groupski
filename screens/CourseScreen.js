@@ -1,34 +1,31 @@
 import * as React from 'react';
 import {
-    View,
     Text,
     TouchableOpacity,
-    TextInput,
-    StyleSheet, ScrollView,
-    BackHandler
+    StyleSheet,
+    ScrollView,
+    BackHandler,
+    ActivityIndicator,
 } from 'react-native';
 
 import Group from '../components/Group';
 import database from '@react-native-firebase/database';
 
 function CourseScreen({route, navigation}) {
-    const [groups, onGroupChange] = React.useState([])
-    const {course, user, group, isProf, update, data} = route.params;
-    const [isLoading, onLoadingChange] = React.useState(true);
+    const [groups, onGroupChange] = React.useState([]);
+    const {course, user, isProf, update, data} = route.params;
 
+    // Loads the Group data onto the screen
     async function loadGroupData(groupId) {
-
         const ref = database().ref(`/groups/${groupId}`);
         const groupData = await ref.once('value');
         return new Promise((resolve, reject) => {
             if (course !== null){
-
                 resolve({groupData})
             }
             else{
                 reject(null)
             }
-
         });
     }
 
@@ -42,11 +39,10 @@ function CourseScreen({route, navigation}) {
             })
         }
         route.params.update = false;
-        onLoadingChange(false);
     };
 
+    // Ensures that local group data stays in sync when travelling backwards
     const navBack = () => {
-
         if (course.groups){
             const keys = Object.keys(course.groups);
             let newGroups = {};
@@ -56,20 +52,19 @@ function CourseScreen({route, navigation}) {
                     [keys[i]] : true
                 }
             }
-            data.groups = {...data.courses.groups, ...newGroups}
-            console.log(data)
+            data.groups = {...data.courses.groups, ...newGroups};
         }
 
         navigation.navigate("MainPage", {data: data, uid: user, update: true});
         return true;
-    }
+    };
 
     React.useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", navBack);
         return () => {
             BackHandler.removeEventListener("hardwareBackPress", navBack);
         }
-    },[])
+    },[]);
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -83,8 +78,9 @@ function CourseScreen({route, navigation}) {
             {groups.map((group) => (
                 <Group navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course} data={{data}}/>
         ))}
-        {groups.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no groups in the course yet"}</Text>}
-        {update && updateCourse()}
+        {groups.length === 0 && !update && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no groups in the course yet"}</Text>}
+        {route.params.update && updateCourse() && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
+
         </ScrollView>
     )
 }
@@ -105,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "lightblue"
 }
-})
+});
 
 
 export default CourseScreen;

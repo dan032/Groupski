@@ -1,45 +1,50 @@
 import * as React from 'react';
-import {
-    Text,
-    TouchableOpacity,
-    StyleSheet, PermissionsAndroid, Alert,
-} from 'react-native';
-
 import database from '@react-native-firebase/database';
 import Geolocation from "react-native-geolocation-service";
 
+import {
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    PermissionsAndroid,
+    Alert,
+} from 'react-native';
 
 function Group(props) {
 
-    //course deletion here
+    // Allows the teacher to delete a group
     const deleteGroup = async () => {
         const ref = database().ref();
         const userData = await ref.child(`/users`).once('value');
-        const groupId = props.group.id
+        const groupId = props.group.id;
         const userKeys = Object.keys(userData.val());
 
+        // Removes the group from the course
         ref.child(`/courses/${props.course.id}/groups/${groupId}`).remove();
 
+        // For all users in the group, the group is removed
         for (let i = 0; i < userKeys.length; i++){
             if (userData.val()[userKeys[i]].groups && groupId in userData.val()[userKeys[i]].groups){
                 ref.child(`/users/${userKeys[i]}/groups/${groupId}`).remove();
             }
         }
 
+        // Removes group from group table
         ref.child(`/groups/${groupId}`).remove();
-
         const updateCourseData = await ref.child(`/courses/${props.course.id}`).once('value');
         props.navigation.navigate("Course", {user: props.user, course:updateCourseData.val(), isProf: props.isProf, update: true})
+    };
 
-
-    }
-
+    // Allows the teacher to toggle if a group is able to be graded
+    // It then takes the teacher's coordinates to ensure that when
+    // students grade a group they need to be within 150m of the prof
     const toggleGroup = async () => {
         const ref = database().ref();
         const userData = await database().ref(`/users/${props.user}`).once('value');
         props.group.beingGraded = !props.group.beingGraded;
         ref.child(`/groups/${props.group.id}`).update(props.group);
 
+        // Asks teacher for their location permissions
         if (props.group.beingGraded){
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -49,10 +54,10 @@ function Group(props) {
                 }
             );
 
-            let userUpdate = {...userData.val()}
+            let userUpdate = {...userData.val()};
 
+            // Updates the teacher's location information in the db
             if (granted === PermissionsAndroid.RESULTS.GRANTED){
-
                 await Geolocation.getCurrentPosition(
                     position => {
                         userUpdate.longitude = position.coords.longitude;
@@ -68,7 +73,7 @@ function Group(props) {
         }
 
         props.navigation.navigate("Course", {user:props.user, group:props.group, isProf:props.isProf, course:props.course, update: true, data: props.data})
-    }
+    };
 
     const deleteAlert = () => {
         //only fire if admin/professor
@@ -86,21 +91,18 @@ function Group(props) {
                 {cancelable: true},
             );
         }
-        else{
-            console.log("not prof, go away")
-        }
     };
 
     // Below distance functions were taken from
     // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+    // It calculates the distance between the prof and the student to ensure that the student is close enough
+    // to grade the group
 
     const deg2rad = (deg) => {
         return deg * (Math.PI/180)
     };
 
     const getDistanceFromLatLonInKm = (lat1,lon1,lat2,lon2) => {
-        console.log("Coords 1:" + lat1 + ", " + lon1);
-        console.log("Coords 2:" + lat2 + ", " + lon2);
         const R = 6371; // Radius of the earth in km
         const dLat = deg2rad(lat2-lat1);  // deg2rad below
         const dLon = deg2rad(lon2-lon1);
@@ -110,13 +112,17 @@ function Group(props) {
             Math.sin(dLon/2) * Math.sin(dLon/2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c * 1000;
-
     };
 
+    // Dictates where the user will go when clicking a group
+    // If the group is active, they will be brought to the rubric.
+    // Else they will be brought to the group screen
     const groupClick = async () => {
         if (props.group.beingGraded){
-
             const ref = database().ref();
+
+            // Acquires prof data to check for location and user data
+            // to ensure they are inside of a group within the course
             const profData = await ref.child(`/users/${props.course.prof}`).once('value');
             const userData = await ref.child(`/users/${props.user}`).once('value');
 
@@ -127,19 +133,16 @@ function Group(props) {
                 const userGroupKeys = Object.keys(userUpdate.groups);
                 const courseGroupKeys = Object.keys(props.course.groups);
 
-                console.log(courseGroupKeys)
                 for (let i = 0; i < userGroupKeys.length; i++){
-                    console.log(userGroupKeys[i])
                     if (courseGroupKeys.includes(userGroupKeys[i])){
                         hasGroup = true;
                     }
                 }
             }
 
-            if (hasGroup){
+            if (hasGroup || props.isProf){
                 PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
                     .then( async (granted) => {
-                        console.log(granted)
                         if (granted){
                             await Geolocation.getCurrentPosition(
                                 position => {
@@ -147,7 +150,7 @@ function Group(props) {
                                     userUpdate.latitude = position.coords.latitude;
                                     ref.child(`/users/${props.user}`).update(userUpdate);
 
-                                    const distance = getDistanceFromLatLonInKm(userUpdate.latitude, userUpdate.longitude, profData.val().latitude, profData.val().longitude)
+                                    const distance = getDistanceFromLatLonInKm(userUpdate.latitude, userUpdate.longitude, profData.val().latitude, profData.val().longitude);
                                     if (distance  >= 0){
                                         props.navigation.navigate('Rubric', {group: props.group, user: props.user, isProf: props.isProf, course: props.course, update: true})
                                     }
@@ -162,7 +165,7 @@ function Group(props) {
                             Alert.alert("Error", "Go into settings to enable location services")
                         }
                     }).catch(err => {
-                    console.log("C: " + err.message)
+                        Alert.alert("Error", err.message);
                 })
             }
             else{
@@ -202,6 +205,6 @@ const styles = StyleSheet.create({
     active: {
         backgroundColor: 'lightgreen'
     }
-})
+});
 
 export default Group;

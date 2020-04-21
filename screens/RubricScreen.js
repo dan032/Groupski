@@ -1,37 +1,33 @@
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-
 import * as React from 'react';
-import {useState} from 'react';
+import RadioForm from 'react-native-simple-radio-button';
+import database from '@react-native-firebase/database';
+
 import {
     View,
     Button,
     Text,
-    StyleSheet, SafeAreaView, ScrollView, TouchableHighlight, TouchableOpacity
+    StyleSheet,
+    SafeAreaView,
+    ScrollView
 } from 'react-native';
-
-import database from '@react-native-firebase/database';
-
-
 
 function RubricScreen({route, navigation}) {
 
     const {isProf, course, user, group} = route.params;
-    var radio_props_implementation = [
+    const radio_props_implementation = [
         {label: "Poor", value: 1 },
         {label: "Satisfactory", value: 2 },
         {label: "Good", value: 3 },
         {label: "Excelent", value: 4 }
     ];
 
-
-    //Submission code here
     const submit = async () => {
         const ref = database().ref();
         const groupData = await ref.child(`groups`).once('value');
         const groupBeingMarked = group.id;
         const currCourseId = course.id;
         const currUser = user;
-        let grade = c1 + c2 + c3
+        let grade = c1 + c2 + c3;
         if (isProf){
             ref.child(`/courses/${currCourseId}/profGrades/${groupBeingMarked}`).set(grade);
         }
@@ -47,29 +43,21 @@ function RubricScreen({route, navigation}) {
 
             ref.child(`/courses/${currCourseId}/studentGrades/${groupBeingMarked}/${markingGroup.id}`).set(grade)
         }
-
         navigation.navigate("MainPage", {isProf: isProf, course: course, user: user, group: group})
     };
 
     //results are stored here as 0,1,2,3 where c1 is implementation, c2 design etc
-    var c1,c2,c3;
+    let c1,c2,c3;
 
     const onPressImp = (e, category) => {
-        // setChoices({id:5, description: "test"})
-        if(category == "Implementation"){
+        if(category === "Implementation"){
             c1=e;
-            console.log("Implementation: " + c1)
         }
-        else if(category == "Design"){
+        else if(category === "Design"){
             c2=e;
-            console.log("Design choice: " + c2)
         }
-        else if(category == "Delivery"){
+        else if(category === "Delivery"){
             c3=e;
-            console.log("Delivery choice: " + c3)
-        }
-        else{
-            console.log("Unknown Category selected")
         }
     };
 
@@ -116,7 +104,7 @@ function RubricScreen({route, navigation}) {
                         />
                     </View>
 
-                    <Button title={"Submit"} onPress={submit}></Button>
+                    <Button title={"Submit"} onPress={submit}/>
                 </View>
             </ScrollView >
         </SafeAreaView>

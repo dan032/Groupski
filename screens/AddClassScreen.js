@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
 
 function AddClassScreen({route, navigation}) {
     const [code, onChangeCode] = React.useState("");
@@ -20,6 +19,7 @@ function AddClassScreen({route, navigation}) {
     const {user} = route.params;
     let {data} = route.params;
 
+    // Allows the user to sign up for a course
     const registerForCourse = async () => {
       if (code === "" || secret === ""){
           Alert.alert("Error", "Please enter all required information");
@@ -28,15 +28,14 @@ function AddClassScreen({route, navigation}) {
           try{
               onChangeLoading(true);
               const ref = database().ref();
-              // const courseData = await ref.child('courses').child(code).once('value');
               const courseData = await ref.child('courses').once('value');
 
               if (courseData) {
-
                   const coursesKeys =  Object.keys(courseData.val());
                   const length = coursesKeys.length;
                   let currCourse = {};
 
+                  // Finds a course that matches the user's input
                   for (let i = 0; i < length; i++){
                       const curr = courseData.val()[coursesKeys[i]];
                       if (curr.code === code && curr.subcode === subCode){
@@ -45,13 +44,17 @@ function AddClassScreen({route, navigation}) {
                       }
                   }
 
+                  // If a course is found
                   if (currCourse){
                       const key = currCourse.id;
+
+                      // Sets up user and course relationship
                       let updates = {};
                       updates[`/courses/${key}/students/${user}`] = true;
                       updates[`/users/${user}/courses/${key}`] = true;
-
                       ref.update(updates);
+
+                      // Required in case user does not have any courses
                       if (data.courses === undefined){
                           data.courses = {
                               [key] : true
@@ -69,7 +72,7 @@ function AddClassScreen({route, navigation}) {
                   }
               }
               else{
-                  Alert.alert("Error", "Incorrect Course Code")
+                  Alert.alert("Error", "Unable to access course content");
                   onChangeLoading(false)
               }
           }
@@ -77,13 +80,11 @@ function AddClassScreen({route, navigation}) {
               Alert.alert("Error", e.message);
               onChangeLoading(false)
           }
-
       }
     };
 
     return(
         <View style={styles.container}>
-
             <Text style={{marginTop: 20, fontSize: 20}}>Sign up for a Course</Text>
             <TextInput
                 style={styles.txtInput}

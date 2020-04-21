@@ -21,10 +21,9 @@ function LoginScreen({route, navigation}) {
     const [password, onChangePassword] = React.useState('');
     const [isLoading, onChangeLoading] = React.useState(false);
 
-
-    function startRegister(){
-        if(userName == '' || password == ''){
-            console.log("invalid input")
+    // Begins login process for user
+    function startLogin(){
+        if(userName === '' || password === ''){
             Alert.alert('Invalid Input',
                 'You must enter a username and a password!',
                 [{text: 'OK', onPress:() => {}}] ,
@@ -32,10 +31,11 @@ function LoginScreen({route, navigation}) {
         }
         else{
             register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid, update: true})).catch(() => {
-                console.log("ERROR BRO")
             });
         }
     }
+
+    // Responsible for authentication during login acquires user data for application
     async function register() {
         try {
             onChangeLoading(true);
@@ -50,7 +50,6 @@ function LoginScreen({route, navigation}) {
                 else{
                     reject(null)
                 }
-
             });
 
         } catch (e) {
@@ -94,9 +93,7 @@ function LoginScreen({route, navigation}) {
             />
             <View style={styles.btnRow}>
                 <TouchableOpacity
-                    // onPress={() => navigation.navigate('MainPage',{
-                    //     data})}
-                    onPress={() => startRegister()}
+                    onPress={() => startLogin()}
                 >
                     <Text style={[styles.btn, styles.btnSubmit]}>Submit</Text>
                 </TouchableOpacity>
@@ -107,7 +104,6 @@ function LoginScreen({route, navigation}) {
                 </TouchableOpacity>
             </View>
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
-
         </View>
     )
 }

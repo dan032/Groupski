@@ -16,22 +16,36 @@ function AddGroupScreen({route, navigation}) {
     const [groupName, onChangeGroupName] = React.useState("");
     const {user, course} = route.params;
 
+    // Allows the user to create a group
     const createGroup = async () => {
         if (groupName === ""){
             Alert.alert("Error", "Please enter a group name");
         }
         else{
             onChangeLoading(true);
+
+            // Acquires a reference of the database, and uses it to
+            // create a UID for the new group
             const ref = database().ref();
             const groupData = await ref.child('groups').once('value');
             const key = ref.child('groups').push().key;
+            const groupKeys = Object.keys(groupData.val());
 
-            if (groupName in groupData.val()){
+            // Ensures that there isn't a group in the class with the same name
+            let exits = false;
+            for (let i = 0; i < groupKeys.length; i++){
+                console.log(groupData.val()[groupKeys[i]]);
+                if (groupName === groupData.val()[groupKeys[i]].title && course.id === groupData.val()[groupKeys[i]].course){
+                    exits = true;
+                    break;
+                }
+            }
+            if (exits){
                 Alert.alert("Error", "Group already exists!");
+                onChangeLoading(false)
             }
             else{
                 let updates = {};
-                console.log(course)
                 const courseCode = course.id;
                 let group = {
                     id: key,
@@ -39,13 +53,15 @@ function AddGroupScreen({route, navigation}) {
                     course: courseCode,
                     title: groupName
                 };
+
+                // Sets up relationship between the user, course and the group
                 updates[`/groups/${key}/members/${user}`] = true;
                 updates[`/users/${user}/groups/${key}`] = true;
                 updates[`/courses/${course.id}/groups/${key}`] = true;
-
                 ref.child('groups').child(key).update(group);
                 ref.update(updates);
 
+                // Updates data stored in the program to be sent back to CourseScreen
                 if (course.groups === undefined){
                     course["groups"] = {
                         [key]: true
@@ -54,13 +70,11 @@ function AddGroupScreen({route, navigation}) {
                 else{
                     course.groups = {...course.groups, [key]: true}
                 }
-                console.log("KEY: " + key);
-                console.log("Course: " + JSON.stringify(course));
                 onChangeLoading(false);
                 navigation.navigate("Course", {user: user, course: course, update: true})
             }
         }
-    }
+    };
 
     return(
         <View style={styles.container}>

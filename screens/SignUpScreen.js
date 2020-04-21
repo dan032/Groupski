@@ -11,10 +11,8 @@ import {
 
 import Geolocation from 'react-native-geolocation-service';
 import { CheckBox} from 'react-native-elements'
-
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-
 
 function SignUpScreen({route, navigation}) {
     const [userName, onChangeUserName] = React.useState('');
@@ -24,6 +22,7 @@ function SignUpScreen({route, navigation}) {
     const [isTeacher, onChangeTeacher] = React.useState(false);
     const [isLoading, onChangeLoading] = React.useState(false);
 
+    // Allows user to register to the application
     const  registerUser = async () =>{
         if (userName === '' || password === '' || email === ''){
             Alert.alert("Error", "Please enter appropriate details");
@@ -55,7 +54,6 @@ function SignUpScreen({route, navigation}) {
                 user['isProf'] = isTeacher;
                 if (granted === PermissionsAndroid.RESULTS.GRANTED){
                     try{
-                        console.log("Granted")
                         await Geolocation.getCurrentPosition(
                             position => {
 
@@ -89,8 +87,6 @@ function SignUpScreen({route, navigation}) {
                         onChangeLoading(false);
                     });
                 }
-
-
             })
             .catch((err) => {
                 switch (err.code) {
@@ -105,10 +101,11 @@ function SignUpScreen({route, navigation}) {
         }
     };
 
+    // Ensures that user can only select one option
     const onClickCheckBox = (e) => {
         if ((e === 1 && !isStudent) || (e === 2 && !isTeacher)){
-            onChangeStudent(!isStudent)
-            onChangeTeacher(!isTeacher)
+            onChangeStudent(!isStudent);
+            onChangeTeacher(!isTeacher);
         }
     };
 
@@ -169,7 +166,6 @@ function SignUpScreen({route, navigation}) {
 const styles = StyleSheet.create({
     innerContainer: {
         alignItems: "center",
-        // flexDirection: "column"
     },
     txtInput : {
         marginHorizontal: "auto",
@@ -201,6 +197,5 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly"
     }
 });
-
 
 export default SignUpScreen

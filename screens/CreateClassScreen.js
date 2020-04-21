@@ -18,6 +18,7 @@ function CreateClassScreen({route, navigation}) {
     const [isLoading, onChangeLoading] = React.useState(false);
     const {user, data} = route.params;
 
+    // Allows the teacher to create a class
     const createClass = async () => {
         if (code === "" || subCode === "" || courseName === "" ||secret === ""){
             Alert.alert("Error", "Please enter all required information");
@@ -32,6 +33,8 @@ function CreateClassScreen({route, navigation}) {
                 const length = coursesKeys.length;
                 let exists = false;
 
+                // Ensures that the prof doesn't try to create a course
+                // that already exists
                 for (let i = 0; i < length; i++){
                     const curr = courseData.val()[coursesKeys[i]];
                     if (curr.code === code && curr.subcode === subCode){
@@ -40,10 +43,11 @@ function CreateClassScreen({route, navigation}) {
                     }
                 }
                 if (exists){
-                    Alert.alert("Error", "Course Already exists!")
+                    Alert.alert("Error", "Course Already exists!");
                     onChangeLoading(false);
                 }
                 else{
+                    // Gets a id for the course
                     const key = ref.child('courses').push().key;
                     let newCourse = {
                         code,
@@ -53,9 +57,11 @@ function CreateClassScreen({route, navigation}) {
                         title: courseName,
                         secret
                     };
-                    let updates = {}
+
+                    // Updates the course table and teacher with the course
+                    let updates = {};
                     updates[`/users/${user}/courses/${key}`] = true;
-                    ref.update(updates)
+                    ref.update(updates);
                     ref.child('courses').child(key).update(newCourse);
 
                     if (data.courses === undefined){
@@ -74,7 +80,7 @@ function CreateClassScreen({route, navigation}) {
                 onChangeLoading(false);
             }
         }
-    }
+    };
 
     return (
         <View style={styles.container}>
