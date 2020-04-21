@@ -105,9 +105,10 @@ function GroupScreen({route, navigation}) {
     };
     const clickAlert = (member) => {
         if (isProf || member.id === user) {
+            const msg = member.id !== user ? "Remove from group?": "Do you want to leave the group?";
             Alert.alert(
                 'Warning!',
-                "Do you want to leave the group?",
+                msg,
                 [
                     {text: 'Leave', onPress: () => removeFromGroup(member)},
                     {text: 'Cancel', style: 'cancel'},
