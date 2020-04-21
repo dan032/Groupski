@@ -1,4 +1,5 @@
 import * as React from 'react';
+import style from '../css/style';
 import {
     View,
     Text,
@@ -88,25 +89,25 @@ function CreateClassScreen({route, navigation}) {
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Create a Course</Text>
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeCode(text)}
                 value={code}
                 placeholder={"Enter the Course Code for the course"}
             />
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeSubCode(text)}
                 value={subCode}
                 placeholder={"Enter the Sub Code for the course"}
             />
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeCourseName(text)}
                 value={courseName}
                 placeholder={"Enter the Course Name"}
             />
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeSecret(text)}
                 value={secret}
                 placeholder={"Enter the Course Secret"}
@@ -131,16 +132,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     txtInput : {
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        marginTop: 20,
+        padding: 0,
         marginBottom: 10,
-        justifyContent: "center",
-        alignItems: "center",
         borderRadius: 5,
-        textAlign: "center"
+        textAlign: "center",
+        backgroundColor: "rgba(0,0,0,0)"
     },
     btn: {
         marginTop: 20,

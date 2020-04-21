@@ -1,7 +1,7 @@
 import * as React from 'react';
 import database from '@react-native-firebase/database';
 import Geolocation from "react-native-geolocation-service";
-
+import style from '../css/style';
 import {
     Text,
     TouchableOpacity,
@@ -180,7 +180,7 @@ function Group(props) {
     return(
         <TouchableOpacity
             onPress={() => groupClick()}
-            style={[styles.group, props.group.beingGraded && styles.active]}
+            style={[style.unit, props.group.beingGraded && styles.active]}
             onLongPress={() => deleteAlert()}
         >
 
@@ -190,18 +190,6 @@ function Group(props) {
 }
 
 const styles = StyleSheet.create({
-    group: {
-        padding: 30,
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        borderRadius: 10,
-        marginTop: 20,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "lightblue"
-    },
     active: {
         backgroundColor: 'lightgreen'
     }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import style from '../css/style';
 import {
     View,
     Text,
@@ -130,14 +131,14 @@ function GroupScreen({route, navigation}) {
             </View>
             {!inGroup &&
             <TouchableOpacity
-                style={[styles.member, styles.btn]}
+                style={[style.unit, styles.btn]}
                 onPress={() => addUser()}
             >
                 <Text>{"Join group"}</Text>
             </TouchableOpacity>}
 
             {members.map((member, i) => (
-                <TouchableOpacity key={i} style={styles.member} onLongPress={()=>clickAlert(member.memberData.val())}>
+                <TouchableOpacity key={i} style={style.unit} onLongPress={()=>clickAlert(member.memberData.val())}>
                     <Text >{member.memberData.val().name}</Text>
                 </TouchableOpacity>
             ))}
@@ -165,19 +166,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: "darkred"
     },
-    member: {
-        height: 40,
-        paddingVertical: 30,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        marginTop: 20,
-        textAlign: "center",
-        borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "lightblue"
-    },
+
     btn:{
          backgroundColor: "lightgreen"
     }

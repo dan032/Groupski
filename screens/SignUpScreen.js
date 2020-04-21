@@ -13,6 +13,7 @@ import Geolocation from 'react-native-geolocation-service';
 import { CheckBox} from 'react-native-elements'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import style from '../css/style';
 
 function SignUpScreen({navigation}) {
     const [userName, onChangeUserName] = React.useState('');
@@ -114,20 +115,20 @@ function SignUpScreen({navigation}) {
             <View style={styles.innerContainer}>
                 <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Sign up Page</Text>
                 <TextInput
-                    style={styles.txtInput}
+                    style={[style.unit,styles.txtInput]}
                     onChangeText={text=> onChangeUserName(text)}
                     value={userName}
                     placeholder={"Enter your full name"}
                 />
                 <TextInput
-                    style={styles.txtInput}
+                    style={[style.unit,styles.txtInput]}
                     onChangeText={text=> onChangeEmail(text)}
                     value={email}
                     placeholder={"Enter Email"}
                 />
                 <TextInput
                     secureTextEntry = {true}
-                    style={styles.txtInput}
+                    style={[style.unit,styles.txtInput]}
                     onChangeText={text=> onChangePassword(text)}
                     value={password}
                     placeholder={"Enter Password"}
@@ -171,17 +172,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     txtInput : {
-        marginHorizontal: "auto",
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        marginTop: 20,
+        padding: 0,
         marginBottom: 10,
-        justifyContent: "center",
-        alignItems: "center",
         borderRadius: 5,
-        textAlign: "center"
+        textAlign: "center",
+        backgroundColor: "rgba(0,0,0,0)"
     },
     checkBoxes: {
         backgroundColor: "beige",

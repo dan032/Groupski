@@ -1,4 +1,5 @@
 import * as React from 'react';
+import style from '../css/style';
 import {
     View,
     Text,
@@ -85,7 +86,7 @@ function AddGroupScreen({route, navigation}) {
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={{marginTop: 20, fontSize: 20}}>Create a Group</Text>
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeGroupName(text)}
                 value={groupName}
                 placeholder={"Enter the Group name"}
@@ -110,16 +111,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     txtInput : {
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        marginTop: 20,
+        padding: 0,
         marginBottom: 10,
-        justifyContent: "center",
-        alignItems: "center",
         borderRadius: 5,
-        textAlign: "center"
+        textAlign: "center",
+        backgroundColor: "rgba(0,0,0,0)"
     },
     btn: {
         marginTop: 20,

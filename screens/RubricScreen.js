@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
     },
     innerContainer: {
         alignItems: "center",
-        // flexDirection: "column"
     },
     selected:{
         fontSize:30
@@ -140,9 +139,6 @@ const styles = StyleSheet.create({
         textAlign: "left",
         padding: 20,
         marginBottom: 10,
-        // paddingLeft: 20,
-        // paddingRight:20,
-        // paddingTop:15,
         backgroundColor: "#fdf5e6"
 
     },
@@ -151,34 +147,6 @@ const styles = StyleSheet.create({
         marginLeft:10,
         marginRight:10
     },
-    txtInput : {
-        marginHorizontal: "auto",
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        marginTop: 20,
-        marginBottom: 10,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 5,
-        textAlign: "center"
-    },
-    btn: {
-        marginTop: 20,
-        padding: 10,
-        borderRadius: 5
-    },
-    btnSubmit: {
-        backgroundColor: "lightgreen"
-    },
-    btnSignUp: {
-        backgroundColor: "lightblue"
-    },
-    btnRow: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: "space-evenly"
-    }
+
 });
 export default RubricScreen;

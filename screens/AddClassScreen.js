@@ -1,4 +1,5 @@
 import * as React from 'react';
+import style from '../css/style';
 import {
     View,
     Text,
@@ -86,19 +87,19 @@ function AddClassScreen({route, navigation}) {
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={{marginTop: 20, fontSize: 20}}>Sign up for a Course</Text>
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeCode(text)}
                 value={code}
                 placeholder={"Enter the Course Code that you want to join"}
             />
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeSubCode(text)}
                 value={subCode}
                 placeholder={"Enter the Sub Code for the course"}
             />
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit, styles.txtInput]}
                 onChangeText={text=> onChangeSecret(text)}
                 value={secret}
                 placeholder={"Enter the Course Secret"}
@@ -125,16 +126,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     txtInput : {
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        marginTop: 20,
+        padding: 0,
         marginBottom: 10,
-        justifyContent: "center",
-        alignItems: "center",
         borderRadius: 5,
-        textAlign: "center"
+        textAlign: "center",
+        backgroundColor: "rgba(0,0,0,0)"
     },
     btn: {
         marginTop: 20,

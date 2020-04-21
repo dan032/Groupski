@@ -1,4 +1,5 @@
 import * as React from 'react';
+import style from '../css/style';
 import {
     Image,
     View,
@@ -88,14 +89,14 @@ function LoginScreen({route, navigation}) {
             <Image style={styles.img} source={require('../images/Groupski.png')}/>
             <Text style={{marginTop: 20, fontSize: 20}}>Login Page</Text>
             <TextInput
-                style={styles.txtInput}
+                style={[style.unit,styles.txtInput]}
                 onChangeText={text=> onChangeUserName(text)}
                 value={userName}
                 placeholder={"Enter Username"}
             />
             <TextInput
                 secureTextEntry = {true}
-                style={styles.txtInput}
+                style={[style.unit,styles.txtInput]}
                 onChangeText={text=> onChangePassword(text)}
                 value={password}
                 placeholder={"Enter Password"}
@@ -123,16 +124,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     txtInput : {
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        marginTop: 20,
+        padding: 0,
         marginBottom: 10,
-        justifyContent: "center",
-        alignItems: "center",
         borderRadius: 5,
-        textAlign: "center"
+        textAlign: "center",
+        backgroundColor: "rgba(0,0,0,0)"
     },
     btn: {
         marginTop: 20,

@@ -1,4 +1,6 @@
 import * as React from 'react';
+import style from '../css/style';
+
 import {
     Text,
     TouchableOpacity,
@@ -71,7 +73,7 @@ function CourseScreen({route, navigation}) {
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>{course.code} Homepage</Text>
             <Text style={{marginTop: 10, fontSize: 20}}>List of groups</Text>
             <TouchableOpacity
-                style={[styles.group, styles.btn]}
+                style={[styles.group,style.unit, styles.btn]}
                 onPress={() => navigation.navigate('AddGroup', {user: user, course: course})}
             >
                 <Text>Add a Group</Text>
@@ -89,18 +91,6 @@ function CourseScreen({route, navigation}) {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-    },
-    group: {
-        padding: 30,
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        borderRadius: 10,
-        marginTop: 20,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "lightblue"
     },
     btn : {
         backgroundColor: "lightgreen"

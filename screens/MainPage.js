@@ -1,4 +1,5 @@
 import * as React from 'react';
+import style from '../css/style';
 import {
     ScrollView,
     Text,
@@ -48,7 +49,7 @@ function MainPage({route, navigation}) {
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Welcome to the Main Page!</Text>
             <Text style={{marginTop: 10, fontSize: 20}}>Hello {data.name}</Text>
             {data.isProf && <TouchableOpacity
-                style={[styles.course, styles.btn]}
+                style={[style.unit, styles.btn]}
                 onPress={() => navigation.navigate('CreateClass', {user: uid, data: data})}
             >
                 <Text>Create a Course</Text>
@@ -74,18 +75,6 @@ function MainPage({route, navigation}) {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-    },
-    course: {
-        padding: 30,
-        height: 40,
-        borderColor: 'gray',
-        width: "80%",
-        borderWidth: 1,
-        borderRadius: 10,
-        marginTop: 20,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "lightblue"
     },
     btn: {
         backgroundColor: "lightgreen"
