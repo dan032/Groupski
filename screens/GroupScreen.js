@@ -131,7 +131,7 @@ function GroupScreen({route, navigation}) {
             </View>
             {!inGroup &&
             <TouchableOpacity
-                style={[style.unit, styles.btn]}
+                style={[style.unit, style.lightgreen]}
                 onPress={() => addUser()}
             >
                 <Text>{"Join group"}</Text>
@@ -166,9 +166,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: "darkred"
     },
-
-    btn:{
-         backgroundColor: "lightgreen"
-    }
 });
 export default GroupScreen

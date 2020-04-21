@@ -73,7 +73,7 @@ function CourseScreen({route, navigation}) {
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>{course.code} Homepage</Text>
             <Text style={{marginTop: 10, fontSize: 20}}>List of groups</Text>
             <TouchableOpacity
-                style={[styles.group,style.unit, styles.btn]}
+                style={[style.unit, style.lightgreen]}
                 onPress={() => navigation.navigate('AddGroup', {user: user, course: course})}
             >
                 <Text>Add a Group</Text>
@@ -92,9 +92,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
     },
-    btn : {
-        backgroundColor: "lightgreen"
-    }
 });
 
 

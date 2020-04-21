@@ -49,14 +49,14 @@ function MainPage({route, navigation}) {
             <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Welcome to the Main Page!</Text>
             <Text style={{marginTop: 10, fontSize: 20}}>Hello {data.name}</Text>
             {data.isProf && <TouchableOpacity
-                style={[style.unit, styles.btn]}
+                style={[style.unit, style.lightgreen]}
                 onPress={() => navigation.navigate('CreateClass', {user: uid, data: data})}
             >
                 <Text>Create a Course</Text>
             </TouchableOpacity>}
 
             {!data.isProf && <TouchableOpacity
-                style={[style.unit, styles.btn]}
+                style={[style.unit, style.lightgreen]}
                 onPress={() => navigation.navigate('AddClass', {user: uid, data: data})}
             >
                 <Text>Add a Course</Text>
@@ -76,8 +76,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
     },
-    btn: {
-        backgroundColor: "lightgreen"
-    }
+
 });
 export default MainPage;

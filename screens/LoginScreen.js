@@ -106,12 +106,12 @@ function LoginScreen({route, navigation}) {
                 <TouchableOpacity
                     onPress={() => startLogin()}
                 >
-                    <Text style={[styles.btn, styles.btnSubmit]}>Submit</Text>
+                    <Text style={[style.btn, style.lightgreen]}>Submit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     title={"Sign Up"}
                     onPress={() => navigation.navigate('SignUp')}>
-                    <Text style={[styles.btn, styles.btnSignUp]}>Sign Up</Text>
+                    <Text style={[style.btn, style.lightblue]}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
@@ -122,19 +122,6 @@ function LoginScreen({route, navigation}) {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-    },
-    btn: {
-        marginTop: 20,
-        padding: 15,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "grey"
-    },
-    btnSubmit: {
-        backgroundColor: "lightgreen"
-    },
-    btnSignUp: {
-        backgroundColor: "lightblue"
     },
     img: {
         marginTop: 20,

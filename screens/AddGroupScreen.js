@@ -94,11 +94,11 @@ function AddGroupScreen({route, navigation}) {
             <View style={styles.btnRow}>
                 <TouchableOpacity
                     onPress={() => createGroup()}>
-                    <Text style={[styles.btn, styles.btnSubmit]}>Submit</Text>
+                    <Text style={[style.btn, style.lightgreen]}>Submit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}>
-                    <Text style={[styles.btn, styles.btnSignUp]}>Cancel</Text>
+                    <Text style={[style.btn, style.lightblue]}>Cancel</Text>
                 </TouchableOpacity>
             </View>
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
@@ -110,19 +110,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
     },
-    btn: {
-        marginTop: 20,
-        padding: 20,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "grey"
-    },
-    btnSubmit: {
-        backgroundColor: "lightgreen"
-    },
-    btnSignUp: {
-        backgroundColor: "lightblue"
-    }
 });
 
 export default AddGroupScreen

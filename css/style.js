@@ -20,4 +20,17 @@ export default StyleSheet.create({
         textAlign: "center",
         backgroundColor: "rgba(0,0,0,0)"
     },
+    btn: {
+        marginTop: 20,
+        padding: 20,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "grey"
+    },
+    lightgreen : {
+        backgroundColor: "lightgreen"
+    },
+    lightblue: {
+        backgroundColor: "lightblue"
+    }
 })
