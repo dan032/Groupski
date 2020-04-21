@@ -52,51 +52,76 @@ function Course(props) {
     const calculateGrades = () => {
         const clickedCourse = props.course.courseData.val();
 
-        if (!clickedCourse.profGrades || !clickedCourse.studentGrades){
-            Alert.alert("Error","Grading has not been done for this course yet")
-        }
-        else{
-            const studentGradeKeys = Object.keys(clickedCourse.studentGrades);
-            const groupKeys = Object.keys(clickedCourse.groups);
-            const ref = database().ref();
+        if ((clickedCourse.profGrades && clickedCourse.studentGrades)) {
+            if (clickedCourse.profGrades.length === clickedCourse.groups.length &&
+                clickedCourse.studentGrades.length === clickedCourse.groups.length) {
 
-            // Iterate through all groups in the course
-            for (let i = 0; i < groupKeys.length; i++) {
-                const currGroup = groupKeys[i];
-                let totalMarked = 0;    // the sum of all the grades they've given other groups
-                let totalGiven = 0;     // the sum of all the grades other groups have given them
-                const profMark = clickedCourse.profGrades[currGroup];   // the grade the prof gave for the current course
+                const studentGradeKeys = Object.keys(clickedCourse.studentGrades);
+                const groupKeys = Object.keys(clickedCourse.groups);
+                const profGradeKeys = Object.keys(clickedCourse.profGrades);
+                const ref = database().ref();
 
-                // Iterate through all marked groups within student grades
-                for (let j = 0; j < studentGradeKeys.length; j++) {
-                    const markedGroup = clickedCourse.studentGrades[studentGradeKeys[j]];   // the group that was marked
-                    const markingGroupKeys = Object.keys(markedGroup);
+                // Calculate prof's total grades given
+                let profTotal = 0;
+                for (let i = 0; i < profGradeKeys.length; i++) {
+                    profTotal += clickedCourse[profGradeKeys[i]]
+                }
+                try{
+                    // Iterate through all groups in the course
+                    for (let i = 0; i < groupKeys.length; i++) {
+                        const currGroup = groupKeys[i];
+                        let totalMarked = 0;    // the sum of all the grades they've given other groups
+                        let totalGiven = 0;     // the sum of all the grades other groups have given them
+                        const profMark = clickedCourse.profGrades[currGroup];   // the grade the prof gave for the current course
 
-                    // Iterate through all marking groups within student grades
-                    for (let k = 0; k < markingGroupKeys.length; k++) {
-                        const markingGroupGrades = markedGroup[markingGroupKeys[k]];       // the group that was marking
+                        // Iterate through all marked groups within student grades
+                        for (let j = 0; j < studentGradeKeys.length; j++) {
+                            const markedGroup = clickedCourse.studentGrades[studentGradeKeys[j]];   // the group that was marked
+                            const markingGroupKeys = Object.keys(markedGroup);
 
-                        if (studentGradeKeys[j] === currGroup) {
-                            totalGiven += markingGroupGrades;
+                            if (markingGroupKeys.length !== Object.keys(clickedCourse.groups).length){
+                                throw Error("Grading has not been finished by all groups")
+                            }
+
+                            // Iterate through all marking groups within student grades
+                            for (let k = 0; k < markingGroupKeys.length; k++) {
+                                const markingGroupGrades = markedGroup[markingGroupKeys[k]];       // the group that was marking
+
+                                if (studentGradeKeys[j] === currGroup) {
+                                    totalGiven += markingGroupGrades;
+                                }
+
+                                if (studentGradeKeys[k] === currGroup) {
+                                    totalMarked += markingGroupGrades;
+                                }
+                            }
                         }
 
-                        if (studentGradeKeys[k] === currGroup) {
-                            totalMarked += markingGroupGrades;
+                        // If the group's mark is within 5% of the prof then no penalty,
+                        // otherwise there will be a 0.5/12 grade penalty
+                        let currGroupAvgMark = totalMarked / groupKeys.length;
+                        let currGroupMarkedAvg = totalGiven / groupKeys.length;
+                        if (currGroupAvgMark / profTotal < 0.95 || currGroupAvgMark / profTotal > 0.95) {
+                            currGroupMarkedAvg = parseFloat((((currGroupMarkedAvg - .5) / .12) * .5) + (profMark / .12) * .5).toFixed(2);
+                            ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupMarkedAvg)
+                        } else {
+                            currGroupMarkedAvg = parseFloat((((currGroupMarkedAvg) / .12) * .5) + (profMark / .12) * .5).toFixed(2);
+                            ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupMarkedAvg)
                         }
                     }
                 }
-
-                // If the group's mark is within 5% of the prof then no penalty,
-                // otherwise there will be a 0.5/12 grade penalty
-                let currGroupAvgMark = totalMarked / groupKeys.length;
-                if (currGroupAvgMark / profMark < 0.95 || currGroupAvgMark / profMark > 0.95) {
-                    currGroupAvgMark = parseFloat((((currGroupAvgMark-.5)/12)*.5) + (profMark/12)*.5).toFixed(2) * 100;
-                    ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
-                } else {
-                    currGroupAvgMark = parseFloat((((currGroupAvgMark)/12)*.5) + (profMark/12)*.5).toFixed(2) * 100;
-                    ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
+                catch (e) {
+                    Alert.alert("Error", e.message)
                 }
+
+            } else {
+
+                Alert.alert("Error", "Grading has not been done for this course yet")
             }
+        }
+        else {
+            Alert.alert("Error", "Grading has not been done for this course yet")
+
         }
     };
 

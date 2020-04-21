@@ -10,7 +10,7 @@ import {
 import database from '@react-native-firebase/database';
 
 function GroupScreen({route, navigation}) {
-    const {group, user, isProf,course} = route.params;
+    const {group, user, isProf,course, data} = route.params;
     const [members, onMembersChange] = React.useState([]);
     const [isLoading, onLoadingChange] = React.useState(true);
     const [inGroup, onChangeInGroup] = React.useState(true);
@@ -26,9 +26,25 @@ function GroupScreen({route, navigation}) {
         userInGroups.remove();
         groupInUser.remove();
 
-        const ref = database().ref(`/groups/${group.id}`);
-        const updatedGroupData = await ref.once('value');
-        navigation.navigate("Course", {group:updatedGroupData.val(), user, isProf, course, update: true})
+        const ref = database().ref();
+        let updatedGroupData = await ref.child(`/groups/${group.id}`).once('value');
+        let updatedCourseData = course;
+        let updatedUserData;
+
+        if (!updatedGroupData.val().members){
+            ref.child(`/groups/${group.id}`).remove();
+            ref.child(`/courses/${course.id}/groups/${group.id}`).remove();
+            updatedCourseData = await ref.child(`/courses/${course.id}`).once('value');
+            updatedUserData = await ref.child(`/users/${user}`).once('value');
+            navigation.navigate("Course", {user, isProf, course: updatedCourseData.val(), update: true, data: updatedUserData.val()})
+        }
+        else{
+            updatedUserData = await ref.child(`/users/${user}`).once('value');
+            navigation.navigate("Course", {user, isProf, course: updatedCourseData, update: true, data: updatedUserData.val()})
+        }
+
+
+
 
     }
 
@@ -129,7 +145,7 @@ function GroupScreen({route, navigation}) {
                     {`Final Grade is: ${group.finalGrade} %`}
                 </Text>}
             </View>
-            {!inGroup &&
+            {!inGroup && !isProf &&
             <TouchableOpacity
                 style={[style.unit, style.lightgreen]}
                 onPress={() => addUser()}
