@@ -28,20 +28,22 @@ function CreateClassScreen({route, navigation}) {
                 onChangeLoading(true);
                 const ref = database().ref();
                 const courseData = await ref.child('courses').once('value');
-
-                const coursesKeys =  Object.keys(courseData.val());
-                const length = coursesKeys.length;
                 let exists = false;
+                if (courseData.val()){
+                    const coursesKeys =  Object.keys(courseData.val());
+                    const length = coursesKeys.length;
 
-                // Ensures that the prof doesn't try to create a course
-                // that already exists
-                for (let i = 0; i < length; i++){
-                    const curr = courseData.val()[coursesKeys[i]];
-                    if (curr.code === code && curr.subcode === subCode){
-                        exists = true;
-                        break;
+                    // Ensures that the prof doesn't try to create a course
+                    // that already exists
+                    for (let i = 0; i < length; i++){
+                        const curr = courseData.val()[coursesKeys[i]];
+                        if (curr.code === code && curr.subcode === subCode){
+                            exists = true;
+                            break;
+                        }
                     }
                 }
+
                 if (exists){
                     Alert.alert("Error", "Course Already exists!");
                     onChangeLoading(false);

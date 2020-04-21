@@ -51,7 +51,7 @@ function Course(props) {
     const calculateGrades = () => {
         const clickedCourse = props.course.courseData.val();
 
-        if (!clickedCourse.profGrades && !clickedCourse.studentGrades){
+        if (!clickedCourse.profGrades || !clickedCourse.studentGrades){
             Alert.alert("Error","Grading has not been done for this course yet")
         }
         else{

@@ -87,7 +87,7 @@ function AddClassScreen({route, navigation}) {
             <Text style={{marginTop: 20, fontSize: 20}}>Sign up for a Course</Text>
             <TextInput
                 style={styles.txtInput}
-                onChangeText={text=> onChangeCode(text.toUpperCase)}
+                onChangeText={text=> onChangeCode(text)}
                 value={code}
                 placeholder={"Enter the Course Code that you want to join"}
             />

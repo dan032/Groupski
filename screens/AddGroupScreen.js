@@ -27,19 +27,24 @@ function AddGroupScreen({route, navigation}) {
             // Acquires a reference of the database, and uses it to
             // create a UID for the new group
             const ref = database().ref();
-            const groupData = await ref.child('groups').once('value');
             const key = ref.child('groups').push().key;
-            const groupKeys = Object.keys(groupData.val());
-
-            // Ensures that there isn't a group in the class with the same name
+            const groupData = await ref.child('groups').once('value');
             let exits = false;
-            for (let i = 0; i < groupKeys.length; i++){
-                console.log(groupData.val()[groupKeys[i]]);
-                if (groupName === groupData.val()[groupKeys[i]].title && course.id === groupData.val()[groupKeys[i]].course){
-                    exits = true;
-                    break;
+
+            if (groupData.val()){
+                const groupKeys = Object.keys(groupData.val());
+
+                // Ensures that there isn't a group in the class with the same name
+
+                for (let i = 0; i < groupKeys.length; i++){
+                    console.log(groupData.val()[groupKeys[i]]);
+                    if (groupName === groupData.val()[groupKeys[i]].title && course.id === groupData.val()[groupKeys[i]].course){
+                        exits = true;
+                        break;
+                    }
                 }
             }
+
             if (exits){
                 Alert.alert("Error", "Group already exists!");
                 onChangeLoading(false)

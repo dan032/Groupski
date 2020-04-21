@@ -31,8 +31,12 @@ function LoginScreen({route, navigation}) {
                 {cancelable: true})
         }
         else{
-            register().then(resolve => navigation.navigate('MainPage', {data:resolve.data.val(), uid:resolve.uid, update: true})).catch(() => {
-            });
+            register()
+                .then((res) => {
+                    if (res){
+                        navigation.navigate('MainPage', {data:res.data.val(), uid:res.uid, update: true});
+                    }
+                })
         }
     }
 
@@ -43,15 +47,18 @@ function LoginScreen({route, navigation}) {
             await auth().signInWithEmailAndPassword(userName, password);
             const uid = auth().currentUser.uid;
             const ref = database().ref(`/users/${uid}`);
-            const data = await ref.once('value').then(onChangeLoading(false));
-            return new Promise((resolve, reject) => {
-                if (data !== null){
-                    resolve({data, uid})
-                }
-                else{
-                    reject(null)
-                }
-            });
+            const data = await ref.once('value');
+            if (data.val()){
+                return new Promise((resolve) => {
+                    onChangeLoading(false);
+                    resolve({data, uid});
+                });
+            }
+            else{
+                onChangeLoading(false);
+                Alert.alert("Error", "Unexpected Error has occurred");
+            }
+
 
         } catch (e) {
             onChangeLoading(false);

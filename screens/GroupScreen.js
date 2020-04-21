@@ -59,7 +59,7 @@ function GroupScreen({route, navigation}) {
                 if (userGroupKeys[i] in course.groups){
                     alreadyInGroup = true;
                 }
-                if (user in group.members){
+                if (group.members && user in group.members){
                     itg = true;
                 }
             }
