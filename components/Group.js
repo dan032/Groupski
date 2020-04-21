@@ -102,7 +102,7 @@ function Group(props) {
         return deg * (Math.PI/180)
     };
 
-    const getDistanceFromLatLonInKm = (lat1,lon1,lat2,lon2) => {
+    const getDistanceFromLatLon = (lat1,lon1,lat2,lon2) => {
         const R = 6371; // Radius of the earth in km
         const dLat = deg2rad(lat2-lat1);  // deg2rad below
         const dLon = deg2rad(lon2-lon1);
@@ -150,7 +150,7 @@ function Group(props) {
                                     userUpdate.latitude = position.coords.latitude;
                                     ref.child(`/users/${props.user}`).update(userUpdate);
 
-                                    const distance = getDistanceFromLatLonInKm(userUpdate.latitude, userUpdate.longitude, profData.val().latitude, profData.val().longitude);
+                                    const distance = getDistanceFromLatLon(userUpdate.latitude, userUpdate.longitude, profData.val().latitude, profData.val().longitude);
                                     if (distance  >= 0){
                                         props.navigation.navigate('Rubric', {group: props.group, user: props.user, isProf: props.isProf, course: props.course, update: true})
                                     }
