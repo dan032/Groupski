@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+    Image,
     View,
     Text,
     TextInput,
@@ -78,6 +79,7 @@ function LoginScreen({route, navigation}) {
     return (
         <View style={styles.container}>
             {route.params && route.params.message && <Text style={{color:"green", marginTop: 20}}>{route.params.message}</Text>}
+            <Image style={styles.img} source={require('../images/Groupski.png')}/>
             <Text style={{marginTop: 20, fontSize: 20}}>Login Page</Text>
             <TextInput
                 style={styles.txtInput}
@@ -138,6 +140,12 @@ const styles = StyleSheet.create({
     },
     btnSignUp: {
         backgroundColor: "lightblue"
+    },
+    img: {
+        marginTop: 20, 
+        width: 300,
+        height: 150, 
+        resizeMode: 'contain'
     }
 });
 
