@@ -112,8 +112,6 @@ function RubricScreen({route, navigation}) {
 }
 
 
-
-
 const styles = StyleSheet.create({
     scrollView:{marginBottom:25},
     radio:{

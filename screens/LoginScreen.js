@@ -89,14 +89,14 @@ function LoginScreen({route, navigation}) {
             <Image style={styles.img} source={require('../images/Groupski.png')}/>
             <Text style={{marginTop: 20, fontSize: 20}}>Login Page</Text>
             <TextInput
-                style={[style.unit,styles.txtInput]}
+                style={[style.unit,style.txtInput]}
                 onChangeText={text=> onChangeUserName(text)}
                 value={userName}
                 placeholder={"Enter Username"}
             />
             <TextInput
                 secureTextEntry = {true}
-                style={[style.unit,styles.txtInput]}
+                style={[style.unit,style.txtInput]}
                 onChangeText={text=> onChangePassword(text)}
                 value={password}
                 placeholder={"Enter Password"}
@@ -122,13 +122,6 @@ function LoginScreen({route, navigation}) {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-    },
-    txtInput : {
-        padding: 0,
-        marginBottom: 10,
-        borderRadius: 5,
-        textAlign: "center",
-        backgroundColor: "rgba(0,0,0,0)"
     },
     btn: {
         marginTop: 20,

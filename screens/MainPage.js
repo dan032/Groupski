@@ -56,7 +56,7 @@ function MainPage({route, navigation}) {
             </TouchableOpacity>}
 
             {!data.isProf && <TouchableOpacity
-                style={[styles.course, styles.btn]}
+                style={[style.unit, styles.btn]}
                 onPress={() => navigation.navigate('AddClass', {user: uid, data: data})}
             >
                 <Text>Add a Course</Text>

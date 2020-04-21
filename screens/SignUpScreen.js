@@ -115,20 +115,20 @@ function SignUpScreen({navigation}) {
             <View style={styles.innerContainer}>
                 <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Sign up Page</Text>
                 <TextInput
-                    style={[style.unit,styles.txtInput]}
+                    style={[style.unit,style.txtInput]}
                     onChangeText={text=> onChangeUserName(text)}
                     value={userName}
                     placeholder={"Enter your full name"}
                 />
                 <TextInput
-                    style={[style.unit,styles.txtInput]}
+                    style={[style.unit,style.txtInput]}
                     onChangeText={text=> onChangeEmail(text)}
                     value={email}
                     placeholder={"Enter Email"}
                 />
                 <TextInput
                     secureTextEntry = {true}
-                    style={[style.unit,styles.txtInput]}
+                    style={[style.unit,style.txtInput]}
                     onChangeText={text=> onChangePassword(text)}
                     value={password}
                     placeholder={"Enter Password"}
@@ -170,13 +170,6 @@ function SignUpScreen({navigation}) {
 const styles = StyleSheet.create({
     innerContainer: {
         alignItems: "center",
-    },
-    txtInput : {
-        padding: 0,
-        marginBottom: 10,
-        borderRadius: 5,
-        textAlign: "center",
-        backgroundColor: "rgba(0,0,0,0)"
     },
     checkBoxes: {
         backgroundColor: "beige",

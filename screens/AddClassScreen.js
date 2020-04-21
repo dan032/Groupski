@@ -87,19 +87,19 @@ function AddClassScreen({route, navigation}) {
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={{marginTop: 20, fontSize: 20}}>Sign up for a Course</Text>
             <TextInput
-                style={[style.unit, styles.txtInput]}
+                style={[style.unit, style.txtInput]}
                 onChangeText={text=> onChangeCode(text)}
                 value={code}
                 placeholder={"Enter the Course Code that you want to join"}
             />
             <TextInput
-                style={[style.unit, styles.txtInput]}
+                style={[style.unit, style.txtInput]}
                 onChangeText={text=> onChangeSubCode(text)}
                 value={subCode}
                 placeholder={"Enter the Sub Code for the course"}
             />
             <TextInput
-                style={[style.unit, styles.txtInput]}
+                style={[style.unit, style.txtInput]}
                 onChangeText={text=> onChangeSecret(text)}
                 value={secret}
                 placeholder={"Enter the Course Secret"}
@@ -124,13 +124,6 @@ export default AddClassScreen;
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-    },
-    txtInput : {
-        padding: 0,
-        marginBottom: 10,
-        borderRadius: 5,
-        textAlign: "center",
-        backgroundColor: "rgba(0,0,0,0)"
     },
     btn: {
         marginTop: 20,

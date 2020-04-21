@@ -12,5 +12,12 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "lightblue"
-    }
+    },
+    txtInput : {
+        padding: 0,
+        marginBottom: 10,
+        borderRadius: 5,
+        textAlign: "center",
+        backgroundColor: "rgba(0,0,0,0)"
+    },
 })
