@@ -90,7 +90,7 @@ function AddGroupScreen({route, navigation}) {
                 value={groupName}
                 placeholder={"Enter the Group name"}
             />
-            <View style={styles.btnRow}>
+            <View>
                 <TouchableOpacity
                     onPress={() => createGroup()}>
                     <Text style={[style.btn, style.lightgreen]}>Submit</Text>

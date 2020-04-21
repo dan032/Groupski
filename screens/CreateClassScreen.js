@@ -114,7 +114,7 @@ function CreateClassScreen({route, navigation}) {
                 value={secret}
                 placeholder={"Enter the Course Secret"}
             />
-            <View style={styles.btnRow}>
+            <View>
                 <TouchableOpacity
                     onPress={() => createClass()}>
                     <Text style={[style.btn, style.lightgreen]}>Submit</Text>

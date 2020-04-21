@@ -12,6 +12,9 @@ import {
 } from 'react-native';
 
 function RubricScreen({route, navigation}) {
+    const [c1, onChangeC1] = React.useState(1);
+    const [c2, onChangeC2] = React.useState(1);
+    const [c3, onChangeC3] = React.useState(1);
 
     const {isProf, course, user, group} = route.params;
     const radio_props_implementation = [
@@ -40,25 +43,9 @@ function RubricScreen({route, navigation}) {
                     markingGroup = tmp;
                 }
             }
-
             ref.child(`/courses/${currCourseId}/studentGrades/${groupBeingMarked}/${markingGroup.id}`).set(grade)
         }
         navigation.navigate("MainPage", {isProf: isProf, course: course, user: user, group: group})
-    };
-
-    //results are stored here as 0,1,2,3 where c1 is implementation, c2 design etc
-    let c1,c2,c3;
-
-    const onPressImp = (e, category) => {
-        if(category === "Implementation"){
-            c1=e;
-        }
-        else if(category === "Design"){
-            c2=e;
-        }
-        else if(category === "Delivery"){
-            c3=e;
-        }
     };
 
     return (
@@ -73,10 +60,10 @@ function RubricScreen({route, navigation}) {
                         <Text style={styles.description}>The the presenters has implemented all features</Text>
                         <RadioForm
                             radio_props={radio_props_implementation}
-                            initial={-1}
+                            initial={0}
                             formHorizontal = {true}
                             labelHorizontal = {false}
-                            onPress={(value) => {onPressImp(value, "Implementation")}} //works,
+                            onPress={(val) => {onChangeC1(val)}}
                             labelStyle={styles.radio}
                         />
 
@@ -84,11 +71,10 @@ function RubricScreen({route, navigation}) {
                         <Text style={styles.description}>The the presentation meets design standards </Text>
                         <RadioForm
                             radio_props={radio_props_implementation}
-                            initial={-1}
+                            initial={0}
                             formHorizontal = {true}
                             labelHorizontal = {false}
-                            onPress={(value) => {onPressImp(value, "Design")}} //works,
-
+                            onPress={(val) => {onChangeC2(val)}}
                             labelStyle={styles.radio}
                         />
 
@@ -96,10 +82,10 @@ function RubricScreen({route, navigation}) {
                         <Text style={styles.description}>The presentation was delivered in a manner expected from college students  </Text>
                         <RadioForm
                             radio_props={radio_props_implementation}
-                            initial={-1}
+                            initial={0}
                             formHorizontal = {true}
                             labelHorizontal = {false}
-                            onPress={(value) => {onPressImp(value, "Delivery")}} //works,
+                            onPress={(val) => {onChangeC3(val)}}
                             labelStyle={styles.radio}
                         />
                     </View>
