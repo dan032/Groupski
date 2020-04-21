@@ -7,7 +7,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Alert,
-    ActivityIndicator
+    ActivityIndicator, ScrollView,
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -76,7 +76,7 @@ function LoginScreen({route, navigation}) {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             {route.params && route.params.message && <Text style={{color:"green", marginTop: 20}}>{route.params.message}</Text>}
             <Image style={styles.img} source={require('../images/Groupski.png')}/>
             <Text style={{marginTop: 20, fontSize: 20}}>Login Page</Text>
@@ -92,6 +92,7 @@ function LoginScreen({route, navigation}) {
                 onChangeText={text=> onChangePassword(text)}
                 value={password}
                 placeholder={"Enter Password"}
+
             />
             <View style={styles.btnRow}>
                 <TouchableOpacity
@@ -106,7 +107,7 @@ function LoginScreen({route, navigation}) {
                 </TouchableOpacity>
             </View>
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
-        </View>
+        </ScrollView>
     )
 }
 
@@ -130,6 +131,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         padding: 15,
         borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "grey"
     },
     btnSubmit: {
         backgroundColor: "lightgreen"
@@ -138,9 +141,9 @@ const styles = StyleSheet.create({
         backgroundColor: "lightblue"
     },
     img: {
-        marginTop: 20, 
+        marginTop: 20,
         width: 300,
-        height: 150, 
+        height: 150,
         resizeMode: 'contain'
     }
 });

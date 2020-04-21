@@ -89,10 +89,10 @@ function Course(props) {
                 // otherwise there will be a 0.5/12 grade penalty
                 let currGroupAvgMark = totalMarked / groupKeys.length;
                 if (currGroupAvgMark / profMark < 0.95 || currGroupAvgMark / profMark > 0.95) {
-                    currGroupAvgMark = parseFloat((((currGroupAvgMark-.5)/12)*.5) + (profMark/12)*.5).toFixed(2);
+                    currGroupAvgMark = parseFloat((((currGroupAvgMark-.5)/12)*.5) + (profMark/12)*.5).toFixed(2) * 100;
                     ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
                 } else {
-                    currGroupAvgMark = parseFloat((((currGroupAvgMark)/12)*.5) + (profMark/12)*.5).toFixed(2);
+                    currGroupAvgMark = parseFloat((((currGroupAvgMark)/12)*.5) + (profMark/12)*.5).toFixed(2) * 100;
                     ref.child(`/groups/${currGroup}/finalGrade`).set(currGroupAvgMark)
                 }
             }
@@ -123,8 +123,10 @@ function Course(props) {
                 {course: props.course.courseData.val(), user: props.user, isProf: props.isProf, update: true, data: props.data})}
             onLongPress={() => {deleteAlert()}}
         >
-            <Text>{props.course.courseData.val().code}</Text>
-            <Text>{props.course.courseData.val().title}</Text>
+            <Text style={{fontWeight: "bold", fontSize: 15, textAlign: 'center'}}> {props.course.courseData.val().code} {props.course.courseData.val().title}</Text>
+            {/*<Text>{</Text>*/}
+            <Text style={{fontSize:10}}>{props.course.courseData.val().subcode}</Text>
+
         </TouchableOpacity>
     )
 }
@@ -132,7 +134,7 @@ function Course(props) {
 
 const styles = StyleSheet.create({
     course: {
-        padding: 30,
+        padding: 33,
         height: 40,
         borderColor: 'gray',
         width: "80%",

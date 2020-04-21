@@ -83,8 +83,8 @@ function CreateClassScreen({route, navigation}) {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={{marginTop: 20, fontSize: 20}}>Sign up for a Course</Text>
+        <ScrollView contentContainerStyle={styles.container}>
+            <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Create a Course</Text>
             <TextInput
                 style={styles.txtInput}
                 onChangeText={text=> onChangeCode(text)}
@@ -120,7 +120,7 @@ function CreateClassScreen({route, navigation}) {
                 </TouchableOpacity>
             </View>
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
-        </View>
+        </ScrollView>
     )
 }
 
@@ -142,8 +142,10 @@ const styles = StyleSheet.create({
     },
     btn: {
         marginTop: 20,
-        padding: 10,
-        borderRadius: 5
+        padding: 20,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "grey"
     },
     btnSubmit: {
         backgroundColor: "lightgreen"

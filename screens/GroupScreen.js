@@ -4,7 +4,7 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Alert,
+    Alert, ScrollView,
 } from 'react-native';
 import database from '@react-native-firebase/database';
 
@@ -13,24 +13,22 @@ function GroupScreen({route, navigation}) {
     const [members, onMembersChange] = React.useState([]);
     const [isLoading, onLoadingChange] = React.useState(true);
     const [inGroup, onChangeInGroup] = React.useState(true);
+    const [inThisGroup, onChangeInThisGroup] = React.useState(true);
 
     // Allows the prof or the current user to take themselves out of a group
     async function removeFromGroup(member){
-        if(isProf || member.id === user){
-            const userInGroups = database().ref(`/groups/${group.id}/members/${member.id}`);
-            const groupInUser = database().ref(`/users/${member.id}/groups/${group.id}`);
-            console.log(`removing user in groups: ${(await userInGroups.once('value')).val()}`);
-            console.log(`removing group in user: ${(await groupInUser.once('value')).val()}`);
-            userInGroups.remove();
-            groupInUser.remove();
 
-            const ref = database().ref(`/groups/${group.id}`);
-            const updatedGroupData = await ref.once('value');
-            navigation.navigate("Course", {group:updatedGroupData.val(), user, isProf, course, update: true})
+        const userInGroups = database().ref(`/groups/${group.id}/members/${member.id}`);
+        const groupInUser = database().ref(`/users/${member.id}/groups/${group.id}`);
+        console.log(`removing user in groups: ${(await userInGroups.once('value')).val()}`);
+        console.log(`removing group in user: ${(await groupInUser.once('value')).val()}`);
+        userInGroups.remove();
+        groupInUser.remove();
 
-        }else{
-            Alert.alert("Error","You must be a professor to remove members other than yourself.")
-        }
+        const ref = database().ref(`/groups/${group.id}`);
+        const updatedGroupData = await ref.once('value');
+        navigation.navigate("Course", {group:updatedGroupData.val(), user, isProf, course, update: true})
+
     }
 
     async function loadMemberData(memberId) {
@@ -51,18 +49,24 @@ function GroupScreen({route, navigation}) {
     const groupCheck = async () => {
         const ref = database().ref();
         const currUserData = await ref.child(`/users/${user}`).once('value');
+        let itg = false;
+        let alreadyInGroup = false;
         if (currUserData.val().groups){
             const userGroupKeys = Object.keys(currUserData.val().groups);
-            let alreadyInGroup = false;
+
+
             for (let i = 0; i < userGroupKeys.length; i++){
                 if (userGroupKeys[i] in course.groups){
                     alreadyInGroup = true;
                 }
+                if (user in group.members){
+                    itg = true;
+                }
             }
-            return new Promise((resolve) => {
-                resolve(alreadyInGroup)
-            })
         }
+        return new Promise((resolve) => {
+            resolve([alreadyInGroup, itg])
+        })
     };
 
     // Adds the user to the group
@@ -91,37 +95,55 @@ function GroupScreen({route, navigation}) {
 
             })
         }
-        route.params.update = false;
-        groupCheck().then((res) => {
-            onChangeInGroup(res)
-        });
 
+        groupCheck().then((ig) => {
+            onChangeInGroup(ig[0]);
+            onChangeInThisGroup(ig[1]);
+        });
+        route.params.update = false;
         onLoadingChange(false);
+    };
+    const clickAlert = (member) => {
+        if (isProf || member.id === user) {
+            Alert.alert(
+                'Warning!',
+                "Do you want to leave the group?",
+                [
+                    {text: 'Leave', onPress: () => removeFromGroup(member)},
+                    {text: 'Cancel', style: 'cancel'},
+                ])
+
+        } else {
+            Alert.alert("Error", "You must be a professor to remove members other than yourself.")
+        }
     };
 
     return (
-        <View style={styles.container}>
-            <Text>{group.title}</Text>
-            <View>
-                {group.finalGrade && <Text>
-                    {`Final Grade is: ${group.finalGrade}`}
+        <ScrollView contentContainerStyle={styles.container}>
+            <Text style={styles.header}>{group.title} Page</Text>
+            <View style={styles.finalGradeContainer}>
+                {group.finalGrade && (inThisGroup || isProf) &&
+                <Text style={styles.finalGrade}>
+                    {`Final Grade is: ${group.finalGrade} %`}
                 </Text>}
             </View>
+            {!inGroup &&
+            <TouchableOpacity
+                style={[styles.member, styles.btn]}
+                onPress={() => addUser()}
+            >
+                <Text>{"Join group"}</Text>
+            </TouchableOpacity>}
+
             {members.map((member, i) => (
-                <TouchableOpacity key={i} style={styles.member} onLongPress={()=>removeFromGroup(member.memberData.val())}>
+                <TouchableOpacity key={i} style={styles.member} onLongPress={()=>clickAlert(member.memberData.val())}>
                     <Text >{member.memberData.val().name}</Text>
                 </TouchableOpacity>
             ))}
             {route.params.update && updateData()}
             {members.length === 0 && !isLoading && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no members in the group yet"}</Text>}
-            {!inGroup &&
-            <TouchableOpacity
-                style={styles.member}
-                onPress={() => addUser()}
-            >
-                <Text>{"Join group"}</Text>
-            </TouchableOpacity>}
-        </View>
+
+        </ScrollView>
     )
 }
 
@@ -129,8 +151,22 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
     },
+    header: {
+        fontSize: 25,
+        marginTop: 20,
+        fontWeight: "bold"
+    },
+    finalGradeContainer: {
+        marginTop: 20,
+
+    },
+    finalGrade: {
+        fontSize: 20,
+        color: "darkred"
+    },
     member: {
         height: 40,
+        paddingVertical: 30,
         borderColor: 'gray',
         width: "80%",
         borderWidth: 1,
@@ -139,7 +175,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: 0x00fa9aff
+        backgroundColor: "lightblue"
+    },
+    btn:{
+         backgroundColor: "lightgreen"
     }
 });
 export default GroupScreen

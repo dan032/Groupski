@@ -45,17 +45,17 @@ function MainPage({route, navigation}) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
 
-            <Text style={{fontSize: 20, marginTop: 20}}>Main Page</Text>
-            <Text style={{marginTop: 10}}>Hello {data.name}</Text>
+            <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Welcome to the Main Page!</Text>
+            <Text style={{marginTop: 10, fontSize: 20}}>Hello {data.name}</Text>
             {data.isProf && <TouchableOpacity
-                style={styles.course}
+                style={[styles.course, styles.btn]}
                 onPress={() => navigation.navigate('CreateClass', {user: uid, data: data})}
             >
                 <Text>Create a Course</Text>
             </TouchableOpacity>}
 
             {!data.isProf && <TouchableOpacity
-                style={styles.course}
+                style={[styles.course, styles.btn]}
                 onPress={() => navigation.navigate('AddClass', {user: uid, data: data})}
             >
                 <Text>Add a Course</Text>
@@ -86,6 +86,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "lightblue"
+    },
+    btn: {
+        backgroundColor: "lightgreen"
     }
 });
 export default MainPage;

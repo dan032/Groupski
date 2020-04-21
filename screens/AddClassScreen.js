@@ -6,7 +6,7 @@ import {
     TextInput,
     TouchableOpacity,
     ActivityIndicator,
-    Alert
+    Alert, ScrollView,
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -34,7 +34,6 @@ function AddClassScreen({route, navigation}) {
                   const coursesKeys =  Object.keys(courseData.val());
                   const length = coursesKeys.length;
                   let currCourse = {};
-
                   // Finds a course that matches the user's input
                   for (let i = 0; i < length; i++){
                       const curr = courseData.val()[coursesKeys[i]];
@@ -84,11 +83,11 @@ function AddClassScreen({route, navigation}) {
     };
 
     return(
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={{marginTop: 20, fontSize: 20}}>Sign up for a Course</Text>
             <TextInput
                 style={styles.txtInput}
-                onChangeText={text=> onChangeCode(text)}
+                onChangeText={text=> onChangeCode(text.toUpperCase)}
                 value={code}
                 placeholder={"Enter the Course Code that you want to join"}
             />
@@ -115,7 +114,7 @@ function AddClassScreen({route, navigation}) {
                 </TouchableOpacity>
             </View>
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
-        </View>
+        </ScrollView>
     )
 }
 
@@ -139,8 +138,10 @@ const styles = StyleSheet.create({
     },
     btn: {
         marginTop: 20,
-        padding: 10,
-        borderRadius: 5
+        padding: 20,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "grey"
     },
     btnSubmit: {
         backgroundColor: "lightgreen"

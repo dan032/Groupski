@@ -6,7 +6,7 @@ import {
     StyleSheet,
     TextInput,
     Alert,
-    ActivityIndicator, PermissionsAndroid,
+    ActivityIndicator, PermissionsAndroid, ScrollView,
 } from 'react-native';
 
 import Geolocation from 'react-native-geolocation-service';
@@ -110,9 +110,9 @@ function SignUpScreen({navigation}) {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.innerContainer}>
-                <Text style={{marginTop: 20, fontSize: 20}}>Sign up Page</Text>
+                <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>Sign up Page</Text>
                 <TextInput
                     style={styles.txtInput}
                     onChangeText={text=> onChangeUserName(text)}
@@ -137,6 +137,7 @@ function SignUpScreen({navigation}) {
                           onPress={() => onClickCheckBox(1)}
                           checkedIcon={'dot-circle-o'}
                           uncheckedIcon={'circle-o'}
+                          containerStyle={styles.checkBoxes}
 
                 />
                 <CheckBox title='Teacher'
@@ -144,13 +145,15 @@ function SignUpScreen({navigation}) {
                           onPress={() => onClickCheckBox(2)}
                           checkedIcon={'dot-circle-o'}
                           uncheckedIcon={'circle-o'}
+                          containerStyle={styles.checkBoxes}
                 />
             </View>
 
 
             <View style={styles.btnRow}>
                 <TouchableOpacity
-                    onPress={() => registerUser()}>
+                    onPress={() => registerUser()}
+                >
                     <Text style={[styles.btn, styles.btnSubmit]}>Submit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -159,7 +162,7 @@ function SignUpScreen({navigation}) {
                 </TouchableOpacity>
             </View>
             {isLoading && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
-        </View>
+        </ScrollView>
     )
 }
 
@@ -180,10 +183,17 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         textAlign: "center"
     },
+    checkBoxes: {
+        backgroundColor: "beige",
+        borderWidth: 1,
+        borderColor: "grey"
+    },
     btn: {
         marginTop: 20,
-        padding: 10,
-        borderRadius: 5
+        padding: 20,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "grey"
     },
     btnSubmit: {
         backgroundColor: "lightgreen"

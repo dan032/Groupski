@@ -68,15 +68,16 @@ function CourseScreen({route, navigation}) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text>{course.code}</Text>
+            <Text style={{fontSize: 25, marginTop: 20, fontWeight: "bold"}}>{course.code} Homepage</Text>
+            <Text style={{marginTop: 10, fontSize: 20}}>List of groups</Text>
             <TouchableOpacity
-                style={styles.group}
+                style={[styles.group, styles.btn]}
                 onPress={() => navigation.navigate('AddGroup', {user: user, course: course})}
             >
                 <Text>Add a Group</Text>
             </TouchableOpacity>
-            {groups.map((group) => (
-                <Group navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course} data={{data}}/>
+            {groups.map((group, i) => (
+                <Group key={i} navigation={navigation} group={group.groupData.val()} user={user} isProf={isProf} course={course} data={{data}}/>
         ))}
         {groups.length === 0 && !update && <Text style={{fontSize: 15, color: "red", marginTop: 20}}>{"There are no groups in the course yet"}</Text>}
         {route.params.update && updateCourse() && <ActivityIndicator color={"#333"} style={{"marginTop": 20}}/>}
@@ -90,17 +91,20 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     group: {
-    padding: 30,
-    height: 40,
-    borderColor: 'gray',
-    width: "80%",
-    borderWidth: 1,
-    borderRadius: 10,
-    marginTop: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightblue"
-}
+        padding: 30,
+        height: 40,
+        borderColor: 'gray',
+        width: "80%",
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "lightblue"
+    },
+    btn : {
+        backgroundColor: "lightgreen"
+    }
 });
 
 
