@@ -106,8 +106,8 @@ function GroupScreen({route, navigation}) {
         <View style={styles.container}>
 
             {members.map(member => (
-                <TouchableOpacity onLongPress={()=>removeFromGroup(member.memberData.val())}>
-                    <Text style={styles.member}>{member.memberData.val().name}</Text>
+                <TouchableOpacity style={styles.member} onLongPress={()=>removeFromGroup(member.memberData.val())}>
+                    <Text >{member.memberData.val().name}</Text>
                 </TouchableOpacity>
             ))}
             {console.log(update)}
