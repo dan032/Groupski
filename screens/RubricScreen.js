@@ -17,10 +17,10 @@ function RubricScreen({route, navigation}) {
 
     const {isProf, course, user, group} = route.params;
     var radio_props_implementation = [
-        {label: "Poor", value: 0 },
-        {label: "Satisfactory", value: 1 },
-        {label: "Good", value: 2 },
-        {label: "Excelent", value: 3 }
+        {label: "Poor", value: 1 },
+        {label: "Satisfactory", value: 2 },
+        {label: "Good", value: 3 },
+        {label: "Excelent", value: 4 }
     ];
 
 
@@ -31,9 +31,9 @@ function RubricScreen({route, navigation}) {
         const groupBeingMarked = group.id;
         const currCourseId = course.id;
         const currUser = user;
-        let grade = parseFloat(((c1 + c2 + c3)/3).toFixed(2));
+        let grade = c1 + c2 + c3
         if (isProf){
-            ref.child(`/courses/${currCourseId}/grades/${groupBeingMarked}/profGrade`).set(grade);
+            ref.child(`/courses/${currCourseId}/profGrades/${groupBeingMarked}`).set(grade);
         }
         else{
             const groupKeys = Object.keys(groupData.val());
@@ -45,7 +45,7 @@ function RubricScreen({route, navigation}) {
                 }
             }
 
-            ref.child(`/courses/${currCourseId}/grades/${groupBeingMarked}/${markingGroup.id}`).set(grade)
+            ref.child(`/courses/${currCourseId}/studentGrades/${groupBeingMarked}/${markingGroup.id}`).set(grade)
         }
 
         navigation.navigate("MainPage", {isProf: isProf, course: course, user: user, group: group})

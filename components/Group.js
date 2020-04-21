@@ -26,7 +26,7 @@ function Group(props) {
             }
         }
 
-        ref.child(`/groups/${groupId}`).remove()
+        ref.child(`/groups/${groupId}`).remove();
 
         const updateCourseData = await ref.child(`/courses/${props.course.id}`).once('value');
         props.navigation.navigate("Course", {user: props.user, course:updateCourseData.val(), isProf: props.isProf, update: true})
